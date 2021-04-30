@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../components/navbar';
 import { Container, Row, Col, ListGroup, Button, Breadcrumb,Form } from 'react-bootstrap';
-import { FileEarmarkFill, Plus } from 'react-bootstrap-icons';
+import { FileEarmarkFill } from 'react-bootstrap-icons';
 import {Link} from 'react-router-dom';
 
 function AddPage(props) {
@@ -12,7 +12,7 @@ function AddPage(props) {
         props.history.push("/pages")
     }
     const category = () => {
-        props.history.push("/categories")
+        props.history.push("/category")
     }
     const user = () => {
         props.history.push("/users")
@@ -30,7 +30,7 @@ function AddPage(props) {
                             <ListGroup.Item action onClick={user}>Users</ListGroup.Item>
                         </ListGroup>
                     </Col>
-                    <Col md={8} className="mt-4">
+                    <Col md={8} className="mt-2">
                         <Row>
                             <Col md={6}>
                                 <span className="page-header" style={{ fontSize: "35px", color: "#1995dc" }}>
@@ -38,7 +38,7 @@ function AddPage(props) {
                                 </span>
                             </Col>
                             <Col md={6}>
-                                <div style={{ float: "right" }}><Link to="/users"><Button variant="outline-dark"><b><Plus></Plus>New</b></Button></Link></div>
+                                <div style={{ float: "right" }}><Link to="/pages/add"><Button variant="outline-primary"><b>New</b></Button></Link></div>
                             </Col>
                         </Row><hr />
                         <Breadcrumb>
@@ -47,14 +47,30 @@ function AddPage(props) {
                                 Pages
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <h3 style={{color:"#1995dc"}}>Add Page</h3>
+                        <h4 style={{color:"#1995dc"}}>Add Page</h4>
                         <Form>
                             <Form.Group>
                                 <Form.Label>Page Title</Form.Label>
                                 <Form.Control type="text" placeholder="Enter Page Title" />
                             </Form.Group>
                             <Form.Group>
-                                
+                                <Form.Label>Choose Category</Form.Label>
+                                <Form.Control as="select" custom>
+                                    <option>Category 1</option>
+                                    <option>Category 2</option>
+                                    <option>Category 3</option>
+                                </Form.Control>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Choose Author</Form.Label>
+                                <Form.Control as="select" custom>
+                                    <option>author 1</option>
+                                    <option>Author 2</option>
+                                    <option>Author 3</option>
+                                </Form.Control>
+                            </Form.Group>
+                            <Form.Group style={{textAlign:"center"}}>
+                            <Button variant="primary">Add Page</Button>
                             </Form.Group>
                         </Form>
                     </Col>

@@ -1,22 +1,23 @@
 import React from 'react';
 import Navbar from '../components/navbar';
-import {Container,Row,Col,ListGroup} from 'react-bootstrap';
-import {Speedometer,FileEarmarkFill} from 'react-bootstrap-icons'
+import { Container, Row, Col, ListGroup } from 'react-bootstrap';
+import { Speedometer, FileEarmarkFill } from 'react-bootstrap-icons'
 
-function Dashboard(props){
-    const dashboard=()=> {
+
+function Dashboard(props) {
+    const dashboard = () => {
         props.history.push("/dashboard")
-      }
-    const page=()=> {
+    }
+    const page = () => {
         props.history.push("/pages")
-      }
-    const category=()=> {
-        props.history.push("/categories")
-      }
-    const user=()=> {
+    }
+    const category = () => {
+        props.history.push("/category")
+    }
+    const user = () => {
         props.history.push("/users")
-      }
-    return(
+    }
+    return (
         <React.Fragment>
             <Navbar />
             <Container className='mt-4'>
@@ -30,7 +31,15 @@ function Dashboard(props){
                         </ListGroup>
                     </Col>
                     <Col md={8}>
-                        
+                        <Row>
+                            <Col md={6}>
+                                <span className="page-header" style={{ fontSize: "35px", color: "#1995dc" }}>
+                                    <FileEarmarkFill></FileEarmarkFill>Dashboard
+                                </span>
+                            </Col>
+                            <Col md={6}>
+                            </Col>
+                        </Row><hr />
                     </Col>
                 </Row>
             </Container>

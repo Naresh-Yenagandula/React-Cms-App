@@ -1,10 +1,10 @@
 import React from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Table } from 'react-bootstrap';
-import { FileEarmarkFill,PencilSquare,TrashFill } from 'react-bootstrap-icons';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb,Form } from 'react-bootstrap';
+import { FileEarmarkFill } from 'react-bootstrap-icons';
 import {Link} from 'react-router-dom';
 
-function Page(props) {
+function UpdatePage(props) {
     const dashboard = () => {
         props.history.push("/dashboard")
     }
@@ -16,9 +16,6 @@ function Page(props) {
     }
     const user = () => {
         props.history.push("/users")
-    }
-    const update = () =>{
-        props.history.push('/pages/update')
     }
     return (
         <React.Fragment>
@@ -33,7 +30,7 @@ function Page(props) {
                             <ListGroup.Item action onClick={user}>Users</ListGroup.Item>
                         </ListGroup>
                     </Col>
-                    <Col md={8} className="mt-4">
+                    <Col md={8} className="mt-2">
                         <Row>
                             <Col md={6}>
                                 <span className="page-header" style={{ fontSize: "35px", color: "#1995dc" }}>
@@ -50,30 +47,36 @@ function Page(props) {
                                 Pages
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <Table hover size="sm">
-                            <thead>
-                                <tr>
-                                    <th>Page title</th>
-                                    <th>Category</th>
-                                    <th>Author</th>
-                                    <th>Update</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td><Button size="sm" onClick={update}><PencilSquare></PencilSquare></Button></td>
-                                    <td><Button size="sm"><TrashFill></TrashFill></Button></td>
-                                </tr>
-                            </tbody>
-                        </Table>
+                        <h4 style={{color:"#1995dc"}}>Update Page</h4>
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>Page Title</Form.Label>
+                                <Form.Control type="text" placeholder="Enter Page Title" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Choose Category</Form.Label>
+                                <Form.Control as="select" custom>
+                                    <option>Category 1</option>
+                                    <option>Category 2</option>
+                                    <option>Category 3</option>
+                                </Form.Control>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Choose Author</Form.Label>
+                                <Form.Control as="select" custom>
+                                    <option>author 1</option>
+                                    <option>Author 2</option>
+                                    <option>Author 3</option>
+                                </Form.Control>
+                            </Form.Group>
+                            <Form.Group style={{textAlign:"center"}}>
+                            <Button variant="primary">Update Page</Button>
+                            </Form.Group>
+                        </Form>
                     </Col>
                 </Row>
             </Container>
         </React.Fragment>
     )
 }
-export default Page;
+export default UpdatePage;

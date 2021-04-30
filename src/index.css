@@ -11,4 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.list-group-item{
+  padding: .50rem 1.25rem !important;
+}
+.breadcrumb{
+  padding: .10rem 1rem  !important;
+}
+.navbar{
+  padding: .3rem 1rem  !important;
+}
 

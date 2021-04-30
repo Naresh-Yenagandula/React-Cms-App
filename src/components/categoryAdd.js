@@ -1,15 +1,14 @@
 import React from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Table } from 'react-bootstrap';
-import { FileEarmarkFill,PencilSquare,TrashFill } from 'react-bootstrap-icons';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb,Form } from 'react-bootstrap';
+import { FileEarmarkFill } from 'react-bootstrap-icons';
 import {Link} from 'react-router-dom';
 
-function Category(props) {
+function AddCategory(props) {
     const dashboard = () => {
         props.history.push("/dashboard")
     }
     const page = () => {
-        console.log(props);
         props.history.push("/pages")
     }
     const category = () => {
@@ -17,9 +16,6 @@ function Category(props) {
     }
     const user = () => {
         props.history.push("/users")
-    }
-    const update = () =>{
-        props.history.push('/category/update')
     }
     return (
         <React.Fragment>
@@ -34,7 +30,7 @@ function Category(props) {
                             <ListGroup.Item action onClick={user}>Users</ListGroup.Item>
                         </ListGroup>
                     </Col>
-                    <Col md={8} className="mt-4">
+                    <Col md={8} className="mt-2">
                         <Row>
                             <Col md={6}>
                                 <span className="page-header" style={{ fontSize: "35px", color: "#1995dc" }}>
@@ -42,7 +38,7 @@ function Category(props) {
                                 </span>
                             </Col>
                             <Col md={6}>
-                                <div style={{ float: "right" }}><Link to="/category/add"><Button variant="outline-primary"><b>New</b></Button></Link></div>
+                                <div style={{ float: "right" }}><Link to="/users"><Button variant="outline-primary"><b>New</b></Button></Link></div>
                             </Col>
                         </Row><hr />
                         <Breadcrumb>
@@ -51,26 +47,20 @@ function Category(props) {
                                 Category
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <Table hover size="sm">
-                            <thead>
-                                <tr>
-                                    <th>Category</th>
-                                    <th>Update</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td><Button size="sm" onClick={update}><PencilSquare></PencilSquare></Button></td>
-                                    <td><Button size="sm"><TrashFill></TrashFill></Button></td>
-                                </tr>
-                            </tbody>
-                        </Table>
+                        <h4 style={{color:"#1995dc"}}>Add Category</h4>
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>Page Title</Form.Label>
+                                <Form.Control type="text" placeholder="Enter Category" />
+                            </Form.Group>
+                            <Form.Group style={{textAlign:"center"}}>
+                            <Button variant="primary">Add Category</Button>
+                            </Form.Group>
+                        </Form>
                     </Col>
                 </Row>
             </Container>
         </React.Fragment>
     )
 }
-export default Category;
+export default AddCategory;

@@ -1,10 +1,10 @@
 import React from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Table } from 'react-bootstrap';
-import { FileEarmarkFill,PencilSquare,TrashFill } from 'react-bootstrap-icons';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb,Form } from 'react-bootstrap';
+import { FileEarmarkFill } from 'react-bootstrap-icons';
 import {Link} from 'react-router-dom';
 
-function User(props) {
+function AddUser(props) {
     const dashboard = () => {
         props.history.push("/dashboard")
     }
@@ -17,9 +17,6 @@ function User(props) {
     const user = () => {
         props.history.push("/users")
     }
-    const update = () =>{
-        props.history.push('/users/update')
-    }
     return (
         <React.Fragment>
             <Navbar />
@@ -28,12 +25,12 @@ function User(props) {
                     <Col md={4}>
                         <ListGroup defaultActiveKey="#link1">
                             <ListGroup.Item action onClick={dashboard}>Dashboard</ListGroup.Item>
-                            <ListGroup.Item action onClick={page}>Pages</ListGroup.Item>
+                            <ListGroup.Item action  onClick={page}>Pages</ListGroup.Item>
                             <ListGroup.Item action onClick={category}>Category</ListGroup.Item>
                             <ListGroup.Item action active onClick={user}>Users</ListGroup.Item>
                         </ListGroup>
                     </Col>
-                    <Col md={8} className="mt-4">
+                    <Col md={8} className="mt-2">
                         <Row>
                             <Col md={6}>
                                 <span className="page-header" style={{ fontSize: "35px", color: "#1995dc" }}>
@@ -50,30 +47,35 @@ function User(props) {
                                 Users
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <Table hover size="sm">
-                            <thead>
-                                <tr>
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Group</th>
-                                    <th>Update</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td><Button size="sm" onClick={update}><PencilSquare></PencilSquare></Button></td>
-                                    <td><Button size="sm"><TrashFill></TrashFill></Button></td>
-                                </tr>
-                            </tbody>
-                        </Table>
+                        <h4 style={{color:"#1995dc"}}>Add User</h4>
+                        <Form>
+                            <Form.Group>
+                                <Form.Label>Full Name</Form.Label>
+                                <Form.Control type="text" placeholder="Enter Full Name" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control type="email" placeholder="Enter Email Id" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control type="text" placeholder="Enter Password" />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Choose Group</Form.Label>
+                                <Form.Control as="select" custom>
+                                    <option>Admin</option>
+                                    <option>Registered</option>
+                                </Form.Control>
+                            </Form.Group>
+                            <Form.Group style={{textAlign:"center"}}>
+                            <Button variant="primary">Add User</Button>
+                            </Form.Group>
+                        </Form>
                     </Col>
                 </Row>
             </Container>
         </React.Fragment>
     )
 }
-export default User;
+export default AddUser;
