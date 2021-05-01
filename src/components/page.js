@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb, Table, Spinner, Alert, Modal } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb, Table,  Alert,Spinner, Modal } from 'react-bootstrap';
 import { FileEarmarkFill, PencilSquare, TrashFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
