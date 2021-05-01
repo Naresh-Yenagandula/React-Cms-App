@@ -9,7 +9,6 @@ function Category(props) {
         props.history.push("/dashboard")
     }
     const page = () => {
-        console.log(props);
         props.history.push("/pages")
     }
     const category = () => {

@@ -105,7 +105,9 @@ function Page(props) {
                             </Breadcrumb.Item>
                         </Breadcrumb>
                         {isLoading ?
-                            <Spinner animation="border" /> :
+                            <Row>
+                                <Col md={{span:6,offset:5}}><Spinner animation="border" /></Col>
+                            </Row> :
                             <Table hover size="sm" className="text-center">
                                 <thead>
                                     <tr>
@@ -126,7 +128,7 @@ function Page(props) {
                                                     <td>{page.category}</td>
                                                     <td>{page.author}</td>
                                                     <td><Link to={`pages/update/${page._id}`}><Button size="sm"><PencilSquare></PencilSquare></Button></Link></td>
-                                                    <td><Button onClick={() => setSmShow({ view: true, id: `${page._id}`, message: '' })} size="sm"><TrashFill></TrashFill></Button></td>
+                                                    <td><Button variant="danger" onClick={() => setSmShow({ view: true, id: `${page._id}`, message: '' })} size="sm"><TrashFill></TrashFill></Button></td>
                                                 </tr>
                                             )
                                         })}
