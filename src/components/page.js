@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Table } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb,Table,Spinner } from 'react-bootstrap';
 import { FileEarmarkFill,PencilSquare,TrashFill } from 'react-bootstrap-icons';
 import {Link} from 'react-router-dom';
+import axios from 'axios';
 
 function Page(props) {
+    const [pageData,setData]  =useState([])
+    const [message,setMessage] = useState()
+    const [isLoading,setLoading] = useState(true)
+
+    useEffect(() => {
+        axios.get("http://localhost:8081/api/pages/0")
+        .then((result)=>{
+            setData(result.data.result)
+            setLoading(false)
+        })
+        .catch((err)=>{
+            setMessage({message:"Something went wrong",variant:"danger"})
+            setLoading(false)
+        })
+    }, [])
+
     const dashboard = () => {
         props.history.push("/dashboard")
     }
@@ -16,9 +33,6 @@ function Page(props) {
     }
     const user = () => {
         props.history.push("/users")
-    }
-    const update = () =>{
-        props.history.push('/pages/update')
     }
     return (
         <React.Fragment>
@@ -50,7 +64,7 @@ function Page(props) {
                                 Pages
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <Table hover size="sm">
+                        <Table hover size="sm" className="text-center">
                             <thead>
                                 <tr>
                                     <th>Page title</th>
@@ -60,15 +74,22 @@ function Page(props) {
                                     <th>Delete</th>
                                 </tr>
                             </thead>
+                            {isLoading?
+                            <Spinner animation="border" />:
                             <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td><Button size="sm" onClick={update}><PencilSquare></PencilSquare></Button></td>
-                                    <td><Button size="sm"><TrashFill></TrashFill></Button></td>
-                                </tr>
+                                {pageData.map((page)=>{
+                                    return(
+                                    <tr key={page._id}>
+                                        <td>{page.title}</td>
+                                        <td>{page.category}</td>
+                                        <td>{page.author}</td>
+                                        <td><Link to={`pages/update/${page._id}`}><Button size="sm"><PencilSquare></PencilSquare></Button></Link></td>
+                                        <td><Button size="sm"><TrashFill></TrashFill></Button></td>
+                                    </tr>
+                                    )
+                                })}
                             </tbody>
+}
                         </Table>
                     </Col>
                 </Row>

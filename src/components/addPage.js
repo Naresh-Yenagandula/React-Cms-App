@@ -1,9 +1,10 @@
 import React from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form,Alert } from 'react-bootstrap';
 import { FileEarmarkFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
 
 function AddPage(props) {
     const [pageData, setPage] = useState({
@@ -16,6 +17,7 @@ function AddPage(props) {
         categoryErrorMessage:'',
         authorErroMessage:''
     });
+    const [message,setMessage]= useState();
     const dashboard = () => {
         props.history.push("/dashboard")
     }
@@ -34,7 +36,7 @@ function AddPage(props) {
 
         if (!pageData.title) {
             titleError = "Title is Required"
-        } else if (!pageData.title.match(/^[A-Za-z]*$/)) {
+        } else if (!pageData.title.match(/^[A-Za-z\s]*$/)) {
             titleError = "Title should contain only alphabets"
         }
 
@@ -59,7 +61,13 @@ function AddPage(props) {
         const isValid = validate();
         if (isValid) {
             setError("")
-            console.log(pageData);
+            axios.post("http://localhost:8081/api/pages",pageData)
+            .then((result)=>{
+                setMessage({message:"Page Added Successfully",variant:"success"})
+            })
+            .catch((err)=>{
+                setMessage({message:"Something went wrong",variant:"danger"})
+            })
         }
     }
     return (
@@ -83,7 +91,7 @@ function AddPage(props) {
                                 </span>
                             </Col>
                             <Col md={6}>
-                                <div style={{ float: "right" }}><Link to="/pages/add"><Button variant="outline-primary"><b>New</b></Button></Link></div>
+                                <div style={{ float: "right" }}><Link to="/pages/add"><Button variant="outline-primary" onClick={e=>setMessage("")}><b>New</b></Button></Link></div>
                             </Col>
                         </Row><hr />
                         <Breadcrumb>
@@ -93,6 +101,8 @@ function AddPage(props) {
                             </Breadcrumb.Item>
                         </Breadcrumb>
                         <h4 style={{ color: "#1995dc" }}>Add Page</h4>
+                        {message?
+                        <Alert variant={message.variant}>{message.message}</Alert>:
                         <Form onSubmit={submitData}>
                             <Form.Group>
                                 <Form.Label>Page Title</Form.Label>
@@ -128,6 +138,7 @@ function AddPage(props) {
                                 <Button variant="primary" type="submit">Add Page</Button>
                             </Form.Group>
                         </Form>
+                    }
                     </Col>
                 </Row>
             </Container>

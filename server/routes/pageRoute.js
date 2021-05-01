@@ -5,7 +5,6 @@ const Page = require('../model/page');
 
 //add page in DB
 router.post('/pages',async (req,res)=>{
-    // console.log(req.body);
     const pages = new Page({
         title:req.body.title,
         category:req.body.category,
