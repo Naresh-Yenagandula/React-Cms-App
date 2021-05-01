@@ -1,19 +1,21 @@
 import React from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form,Alert } from 'react-bootstrap';
 import { FileEarmarkFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
 
-function AddPage(props) {
+function UpdatePage(props) {
     const [pageData, setPage] = useState({
         title:'',
         category:'',
         author:''
     })
     const [error, setError] = useState({
-        titleErrorMessage:''
+        titleErrorMessage:'',
     });
+    const [message,setMessage]= useState();
     const dashboard = () => {
         props.history.push("/dashboard")
     }
@@ -28,11 +30,11 @@ function AddPage(props) {
     }
 
     const validate = () => {
-        let titleError= "";
+        let titleError = "";
 
         if (!pageData.title) {
             titleError = "Title is Required"
-        } else if (!pageData.title.match(/^[A-Za-z]*$/)) {
+        } else if (!pageData.title.match(/^[A-Za-z\s]*$/)) {
             titleError = "Title should contain only alphabets"
         }
 
@@ -49,7 +51,13 @@ function AddPage(props) {
         const isValid = validate();
         if (isValid) {
             setError("")
-            console.log(pageData);
+            axios.post("http://localhost:8081/api/pages",pageData)
+            .then((result)=>{
+                setMessage({message:"Page Updated Successfully",variant:"success"})
+            })
+            .catch((err)=>{
+                setMessage({message:"Something went wrong",variant:"danger"})
+            })
         }
     }
     return (
@@ -73,15 +81,18 @@ function AddPage(props) {
                                 </span>
                             </Col>
                             <Col md={6}>
-                                <div style={{ float: "right" }}><Link to="/pages/add"><Button variant="outline-primary"><b>New</b></Button></Link></div>
+                                <div style={{ float: "right" }}><Link to="/pages/add"><Button variant="outline-primary" onClick={e=>setMessage("")}><b>New</b></Button></Link></div>
                             </Col>
                         </Row><hr />
                         <Breadcrumb>
                             <Breadcrumb.Item href="#">Dashboard</Breadcrumb.Item>
-                            <Breadcrumb.Item>Pages</Breadcrumb.Item>
-                            <Breadcrumb.Item active>Update Page</Breadcrumb.Item>
+                            <Breadcrumb.Item active>
+                                Pages
+                            </Breadcrumb.Item>
                         </Breadcrumb>
                         <h4 style={{ color: "#1995dc" }}>Update Page</h4>
+                        {message?
+                        <Alert variant={message.variant}>{message.message}</Alert>:
                         <Form onSubmit={submitData}>
                             <Form.Group>
                                 <Form.Label>Page Title</Form.Label>
@@ -95,11 +106,12 @@ function AddPage(props) {
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Choose Category</Form.Label>
-                                <Form.Control as="select" onChange={e => setPage({ ...pageData, category: e.target.value })}>
+                                <Form.Control as="select" custom onChange={e => setPage({ ...pageData, category: e.target.value })}>
                                     <option>Category 1</option>
                                     <option>Category 2</option>
                                     <option>Category 3</option>
                                 </Form.Control>
+                                <Form.Control.Feedback type='invalid'>{error.categoryErrorMessage}</Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Choose Author</Form.Label>
@@ -108,15 +120,17 @@ function AddPage(props) {
                                     <option>Author 2</option>
                                     <option>Author 3</option>
                                 </Form.Control>
+                                <Form.Control.Feedback type='invalid'>{error.authorErroMessage}</Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group style={{ textAlign: "center" }}>
-                                <Button variant="primary" type="submit">Update Page</Button>
+                                <Button variant="primary" type="submit">Add Page</Button>
                             </Form.Group>
                         </Form>
+                    }
                     </Col>
                 </Row>
             </Container>
         </React.Fragment>
     )
 }
-export default AddPage;
+export default UpdatePage;

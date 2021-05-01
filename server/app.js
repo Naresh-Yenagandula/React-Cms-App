@@ -30,9 +30,9 @@ app.use(cors());
 app.use(express.json());
 
 //Middleware Route
-app.use('/api/user',authRoute);
+app.use('/authApi',authRoute);
 app.use('/verify',verifyRoute);
-app.use('/getdata',pageRoute);
+app.use('/api',pageRoute);
 
 app.get('/' ,(req,res)=>{
     res.send("Welcome to CMS App Node server");
