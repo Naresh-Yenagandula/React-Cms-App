@@ -1,10 +1,19 @@
 import React from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Form } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form } from 'react-bootstrap';
 import { FileEarmarkFill } from 'react-bootstrap-icons';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
-function UpdatePage(props) {
+function AddPage(props) {
+    const [pageData, setPage] = useState({
+        title:'',
+        category:'',
+        author:''
+    })
+    const [error, setError] = useState({
+        titleErrorMessage:''
+    });
     const dashboard = () => {
         props.history.push("/dashboard")
     }
@@ -16,6 +25,32 @@ function UpdatePage(props) {
     }
     const user = () => {
         props.history.push("/users")
+    }
+
+    const validate = () => {
+        let titleError= "";
+
+        if (!pageData.title) {
+            titleError = "Title is Required"
+        } else if (!pageData.title.match(/^[A-Za-z]*$/)) {
+            titleError = "Title should contain only alphabets"
+        }
+
+        if (titleError) {
+            setError({titleErrorMessage:titleError})
+            return false
+        }
+        return true
+
+    }
+
+    const submitData = (e) => {
+        e.preventDefault();
+        const isValid = validate();
+        if (isValid) {
+            setError("")
+            console.log(pageData);
+        }
     }
     return (
         <React.Fragment>
@@ -43,19 +78,24 @@ function UpdatePage(props) {
                         </Row><hr />
                         <Breadcrumb>
                             <Breadcrumb.Item href="#">Dashboard</Breadcrumb.Item>
-                            <Breadcrumb.Item active>
-                                Pages
-                            </Breadcrumb.Item>
+                            <Breadcrumb.Item>Pages</Breadcrumb.Item>
+                            <Breadcrumb.Item active>Update Page</Breadcrumb.Item>
                         </Breadcrumb>
-                        <h4 style={{color:"#1995dc"}}>Update Page</h4>
-                        <Form>
+                        <h4 style={{ color: "#1995dc" }}>Update Page</h4>
+                        <Form onSubmit={submitData}>
                             <Form.Group>
                                 <Form.Label>Page Title</Form.Label>
-                                <Form.Control type="text" placeholder="Enter Page Title" />
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Enter Page Title"
+                                    onChange={e => setPage({ ...pageData, title: e.target.value })}
+                                    isInvalid={!!error.titleErrorMessage}
+                                />
+                                <Form.Control.Feedback type='invalid'>{error.titleErrorMessage}</Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Choose Category</Form.Label>
-                                <Form.Control as="select" custom>
+                                <Form.Control as="select" onChange={e => setPage({ ...pageData, category: e.target.value })}>
                                     <option>Category 1</option>
                                     <option>Category 2</option>
                                     <option>Category 3</option>
@@ -63,14 +103,14 @@ function UpdatePage(props) {
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Choose Author</Form.Label>
-                                <Form.Control as="select" custom>
+                                <Form.Control as="select" custom onChange={e => setPage({ ...pageData, author: e.target.value })}>
                                     <option>author 1</option>
                                     <option>Author 2</option>
                                     <option>Author 3</option>
                                 </Form.Control>
                             </Form.Group>
-                            <Form.Group style={{textAlign:"center"}}>
-                            <Button variant="primary">Update Page</Button>
+                            <Form.Group style={{ textAlign: "center" }}>
+                                <Button variant="primary" type="submit">Update Page</Button>
                             </Form.Group>
                         </Form>
                     </Col>
@@ -79,4 +119,4 @@ function UpdatePage(props) {
         </React.Fragment>
     )
 }
-export default UpdatePage;
+export default AddPage;

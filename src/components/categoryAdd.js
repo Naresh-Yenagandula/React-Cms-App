@@ -1,8 +1,8 @@
 import React from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Form } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form } from 'react-bootstrap';
 import { FileEarmarkFill } from 'react-bootstrap-icons';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function AddCategory(props) {
     const dashboard = () => {
@@ -47,14 +47,14 @@ function AddCategory(props) {
                                 Category
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <h4 style={{color:"#1995dc"}}>Add Category</h4>
+                        <h4 style={{ color: "#1995dc" }}>Add Category</h4>
                         <Form>
                             <Form.Group>
                                 <Form.Label>Page Title</Form.Label>
                                 <Form.Control type="text" placeholder="Enter Category" />
                             </Form.Group>
-                            <Form.Group style={{textAlign:"center"}}>
-                            <Button variant="primary">Add Category</Button>
+                            <Form.Group style={{ textAlign: "center" }}>
+                                <Button variant="primary">Add Category</Button>
                             </Form.Group>
                         </Form>
                     </Col>
