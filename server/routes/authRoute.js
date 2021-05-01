@@ -3,7 +3,7 @@ const User = require('../model/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-//add incoming user data in DB
+//add incoming user data in Db .
 router.post('/register',async (req,res)=>{
 
     //checks existing email
