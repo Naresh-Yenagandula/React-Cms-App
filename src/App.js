@@ -26,7 +26,7 @@ function App() {
            <Route exact path="/users" component={User} />
            <Route exact path="/pages/add" component={AddPage} />
            <Route exact path="/pages/update/:id" component={UpdatePage} />
-           <Route exact path="/category/update" component={UpdateCategory} />
+           <Route exact path="/category/update/:id" component={UpdateCategory} />
            <Route exact path="/category/add" component={AddCategory} />
            <Route exact path="/users/add" component={AddUser} />
            <Route exact path="/users/update" component={UpdateUser} />

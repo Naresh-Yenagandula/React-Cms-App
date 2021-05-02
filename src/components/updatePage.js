@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../components/navbar';
 import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form,Alert } from 'react-bootstrap';
 import { FileEarmarkFill } from 'react-bootstrap-icons';
@@ -12,10 +12,23 @@ function UpdatePage(props) {
         category:'',
         author:''
     })
+
     const [error, setError] = useState({
         titleErrorMessage:'',
     });
+
     const [message,setMessage]= useState();
+
+    useEffect(()=>{
+        axios.get("http://localhost:8081/api/page/"+props.match.params.id)
+        .then((result)=>{
+            setPage(result.data)
+        })
+        .catch((err)=>{
+            setMessage({message:"Something went Wrong",variant:"danger"})
+        })
+    },[props])
+
     const dashboard = () => {
         props.history.push("/dashboard")
     }
@@ -51,7 +64,7 @@ function UpdatePage(props) {
         const isValid = validate();
         if (isValid) {
             setError("")
-            axios.post("http://localhost:8081/api/pages",pageData)
+            axios.put("http://localhost:8081/api/pages/"+pageData._id,pageData)
             .then((result)=>{
                 setMessage({message:"Page Updated Successfully",variant:"success"})
             })
@@ -99,6 +112,7 @@ function UpdatePage(props) {
                                 <Form.Control
                                     type="text"
                                     placeholder="Enter Page Title"
+                                    value={pageData.title}
                                     onChange={e => setPage({ ...pageData, title: e.target.value })}
                                     isInvalid={!!error.titleErrorMessage}
                                 />
@@ -106,7 +120,7 @@ function UpdatePage(props) {
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Choose Category</Form.Label>
-                                <Form.Control as="select" custom onChange={e => setPage({ ...pageData, category: e.target.value })}>
+                                <Form.Control as="select" value={pageData.category} custom onChange={e => setPage({ ...pageData, category: e.target.value })}>
                                     <option>Category 1</option>
                                     <option>Category 2</option>
                                     <option>Category 3</option>
@@ -115,7 +129,7 @@ function UpdatePage(props) {
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Choose Author</Form.Label>
-                                <Form.Control as="select" custom onChange={e => setPage({ ...pageData, author: e.target.value })}>
+                                <Form.Control as="select" value={pageData.author} custom onChange={e => setPage({ ...pageData, author: e.target.value })}>
                                     <option>author 1</option>
                                     <option>Author 2</option>
                                     <option>Author 3</option>
@@ -123,7 +137,7 @@ function UpdatePage(props) {
                                 <Form.Control.Feedback type='invalid'>{error.authorErroMessage}</Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group style={{ textAlign: "center" }}>
-                                <Button variant="primary" type="submit">Add Page</Button>
+                                <Button variant="primary" type="submit">Update Page</Button>
                             </Form.Group>
                         </Form>
                     }
