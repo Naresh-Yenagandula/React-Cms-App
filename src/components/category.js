@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Table,Alert,Modal,Spinner } from 'react-bootstrap';
-import { FileEarmarkFill,PencilSquare,TrashFill } from 'react-bootstrap-icons';
-import {Link} from 'react-router-dom';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb, Table, Alert, Modal, Spinner } from 'react-bootstrap';
+import { Speedometer, FileEarmarkFill, FolderFill, PeopleFill,TrashFill,PencilSquare } from 'react-bootstrap-icons'
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function Category(props) {
@@ -28,7 +28,7 @@ function Category(props) {
             })
     }, [])
     const deleteCategory = (id) => {
-        setSmShow({view:true,message:"Deleting..."})
+        setSmShow({ view: true, message: "Deleting..." })
         axios.delete("http://localhost:8081/api/categories/" + id)
             .then((result) => {
                 setData(categoryData.filter(category => category._id !== id));
@@ -50,7 +50,7 @@ function Category(props) {
     const user = () => {
         props.history.push("/users")
     }
-    
+
     return (
         <React.Fragment>
             <Navbar />
@@ -76,22 +76,22 @@ function Category(props) {
                         </Modal.Footer>
                     </React.Fragment>
                 }
-                </Modal>
+            </Modal>
             <Container className='mt-4'>
                 <Row>
                     <Col md={4}>
                         <ListGroup defaultActiveKey="#link1">
-                            <ListGroup.Item action onClick={dashboard}>Dashboard</ListGroup.Item>
-                            <ListGroup.Item action onClick={page}>Pages</ListGroup.Item>
-                            <ListGroup.Item action active onClick={category}>Category</ListGroup.Item>
-                            <ListGroup.Item action onClick={user}>Users</ListGroup.Item>
+                            <ListGroup.Item action onClick={dashboard}><Speedometer></Speedometer> Dashboard</ListGroup.Item>
+                            <ListGroup.Item action onClick={page}><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item>
+                            <ListGroup.Item action active onClick={category}><FolderFill></FolderFill> Category</ListGroup.Item>
+                            <ListGroup.Item action onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>
                         </ListGroup>
                     </Col>
                     <Col md={8} className="mt-4">
                         <Row>
                             <Col md={6}>
                                 <span className="page-header" style={{ fontSize: "35px", color: "#1995dc" }}>
-                                    <FileEarmarkFill></FileEarmarkFill>Category 
+                                    <FolderFill></FolderFill> Category
                                 </span>
                             </Col>
                             <Col md={6}>
@@ -105,33 +105,33 @@ function Category(props) {
                             </Breadcrumb.Item>
                         </Breadcrumb>
                         {isLoading ?
-                         <Row>
-                         <Col md={{span:6,offset:5}}><Spinner animation="border" /></Col>
-                     </Row> :
-                        <Table hover size="sm" className="text-center">
-                            <thead>
-                                <tr>
-                                    <th>Category Title</th>
-                                    <th>Update</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            {message ?
-                            <tbody><tr><td colSpan="5"><Alert variant={message.variant}>{message.message}</Alert></td></tr></tbody> :
-                            <tbody>
-                                {categoryData.map((category) => {
+                            <Row>
+                                <Col md={{ span: 6, offset: 5 }}><Spinner animation="border" /></Col>
+                            </Row> :
+                            <Table hover size="sm">
+                                <thead>
+                                    <tr>
+                                        <th>Category Title</th>
+                                        <th>Update</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                {message ?
+                                    <tbody><tr><td colSpan="5"><Alert variant={message.variant}>{message.message}</Alert></td></tr></tbody> :
+                                    <tbody>
+                                        {categoryData.map((category) => {
                                             return (
-                                <tr key ={category._id}>
-                                     <td>{category.title}</td>
-                                     <td><Link to={`category/update/${category._id}`}><Button size="sm"><PencilSquare></PencilSquare></Button></Link></td>
-                                     <td><Button variant="danger" onClick={() => setSmShow({ view: true, id: `${category._id}`, message: '' })} size="sm"><TrashFill></TrashFill></Button></td>
-                                </tr>
+                                                <tr key={category._id}>
+                                                    <td>{category.title}</td>
+                                                    <td><Link to={`category/update/${category._id}`}><Button variant="outline-info" size="sm"><PencilSquare></PencilSquare></Button></Link></td>
+                                                    <td><Button variant="outline-danger" onClick={() => setSmShow({ view: true, id: `${category._id}`, message: '' })} size="sm"><TrashFill></TrashFill></Button></td>
+                                                </tr>
                                             )
                                         })}
-                            </tbody>
-                           }
-                        </Table>
-                       }
+                                    </tbody>
+                                }
+                            </Table>
+                        }
                     </Col>
                 </Row>
             </Container>
