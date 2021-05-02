@@ -8,10 +8,10 @@ import axios from 'axios';
 
 function AddCategory(props) {
     const[categoryData,setCategory]=useState({
-        title:'',
+        title:''
     })
     const[error, setError]=useState({
-        titleErrorMessage:'',
+        titleErrorMessage:''
     });
     const[message,setMessage]=useState();
 
@@ -74,7 +74,7 @@ function AddCategory(props) {
                                 </span>
                             </Col>
                             <Col md={6}>
-                                <div style={{ float: "right" }}><Link to="/users"><Button variant="outline-primary" onClick={e=>setMessage("")}><b>New</b></Button></Link></div>
+                                <div style={{ float: "right" }}><Link to="/category/add"><Button variant="outline-primary" onClick={e=>setMessage("")}><b>New</b></Button></Link></div>
                             </Col>
                         </Row><hr />
                         <Breadcrumb>

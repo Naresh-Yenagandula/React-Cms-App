@@ -14,7 +14,7 @@ function UpdateCategory(props) {
         title:''
     })
     const [error, setError] = useState({
-        titleErrorMessage:'',
+        titleErrorMessage:''
     });
 
     const [message,setMessage]= useState();
@@ -89,7 +89,7 @@ function UpdateCategory(props) {
                                 </span>
                             </Col>
                             <Col md={6}>
-                                <div style={{ float: "right" }}><Link to="/category/add"><Button variant="outline-primary" onclick={e=>setMessage("")}><b>New</b></Button></Link></div>
+                                <div style={{ float: "right" }}><Link to="/category/add"><Button variant="outline-primary" onClick={e=>setMessage("")}><b>New</b></Button></Link></div>
                             </Col>
                         </Row><hr />
                         <Breadcrumb>
