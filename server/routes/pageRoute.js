@@ -29,7 +29,6 @@ router.post('/users',async (req,res)=>{
     });
     try {
         const userSave = await users.save();
-        console.log("abc");
         res.json({message:"Added"});
     } catch (error) {
         // res.status(400).json({message:"Failed to add user"})
@@ -136,7 +135,7 @@ router.put('/users/:id',async (req,res)=>{
     try {
         const data = await User.findByIdAndUpdate(req.params.id,{
             $set:{name:req.body.name, email:req.body.email, group:req.body.group}
-        });
+        },{useFindAndModify: false});
         return res.status(200).json({message:"Updated"});
     } catch (error) {
         console.log("Fail to update user");

@@ -14,7 +14,7 @@ function User(props) {
     const [smShow, setSmShow] = useState({ view: false, id: '', message: '' });
 
     useEffect(() => {
-        axios.get("http://localhost:8081/api/user/0")
+        axios.get("http://localhost:8081/api/users/0")
             .then((result) => {
                 setLoading(false)
                 if (result.data.result[0]) {

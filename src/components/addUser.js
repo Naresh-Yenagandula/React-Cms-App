@@ -47,13 +47,13 @@ function AddUser(props) {
 
         if(!userData.email){
            emailError = "Email is required"
-        } else if (!userData.email.match(/^([a-z 0-9\.-]+)@([a-z 0-9-]+).([a-z]{2,8})(.[a-z]{2,8})?$/)) {
+        } else if (!userData.email.match(/^([a-z0-9\.-]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})?$/)) {
             emailError = "Please enter a valid email"
         }
 
         if (!userData.password) {
             passwordError = "Password is Required"
-        } else if (!userData.password.match(/^[0-9 a-z A-Z]+$/)) {
+        } else if (!userData.password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$]).{8,}/)) {
             passwordError = "Password should be alph-numeric"
         }
 
@@ -72,7 +72,9 @@ function AddUser(props) {
     const submitData = (e) => {
         e.preventDefault();
         const isValid = validate();
+        console.log(isValid);
         if (isValid) {
+            console.log(userData);
             setError("")
             axios.post("http://localhost:8081/api/users",userData)
             .then((result)=>{
@@ -148,6 +150,7 @@ function AddUser(props) {
                             <Form.Group>
                                 <Form.Label>Choose Group</Form.Label>
                                 <Form.Control as="select" custom isInvalid={!!error.groupErrorMessage} onChange={e => setUser({ ...userData, group: e.target.value })}>
+                                    <option>Choose...</option>
                                     <option>Admin</option>
                                     <option>Registered</option>
                                 </Form.Control>
