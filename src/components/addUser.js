@@ -76,7 +76,7 @@ function AddUser(props) {
         if (isValid) {
             console.log(userData);
             setError("")
-            axios.post("http://localhost:8081/api/users", userData)
+            axios.post("http://localhost:8081/authApi/register", userData)
                 .then((result) => {
                     setMessage({ message: "User Added Successfully", variant: "success" })
                 })

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 
@@ -26,7 +27,13 @@ function Login() {
         e.preventDefault()
         const isValid = validate();
         if (isValid) {
-            console.log(loginData);
+            axios.post("http://localhost:8081/authApi/login",loginData)
+            .then((result)=>{
+                localStorage.setItem('token',result.data)
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
         }
     }
     return (
