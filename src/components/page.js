@@ -127,8 +127,8 @@ function Page(props) {
                                                     <td>{page.title}</td>
                                                     <td>{page.category}</td>
                                                     <td>{page.author}</td>
-                                                    <td><Link to={`pages/update/${page._id}`}><Button size="sm" aria-label="update"><PencilSquare></PencilSquare></Button></Link></td>
-                                                    <td><Button variant="danger" aria-label="delete" onClick={() => setSmShow({ view: true, id: `${page._id}`, message: '' })} size="sm"><TrashFill></TrashFill></Button></td>
+                                                    <td><Link to={`pages/update/${page._id}`}><Button variant="outline-info" size="sm" aria-label="update"><PencilSquare></PencilSquare></Button></Link></td>
+                                                    <td><Button variant="outline-danger" aria-label="delete" onClick={() => setSmShow({ view: true, id: `${page._id}`, message: '' })} size="sm"><TrashFill></TrashFill></Button></td>
                                                 </tr>
                                             )
                                         })}

@@ -10,14 +10,12 @@ function UpdateUser(props) {
     const [userData, setUser] = useState({
         name:'',
         email:'',
-        // password:'',
         group:''
     })
 
     const [error, setError] = useState({
         nameErrorMessage:'',
         emailErrorMessage:'',
-        // passwordErrorMessage:'',
         groupErroMessage:''
     });
 
@@ -47,32 +45,26 @@ function UpdateUser(props) {
     }
 
     const validate = () => {
-        let nameError,emailError,/*passwordError*/groupError = "";
+        let nameError,emailError,groupError = "";
 
         if (!userData.name) {
             nameError = "Full Name is Required"
-        } else if (!userData.name.match(/^[A-Za-z\s]*$/)) {
+        } else if (!userData.name.match(/[a-zA-Z\s]+$/)) {
             nameError = "Full Name should contain only alphabets"
         }
 
         if(!userData.email){
            emailError = "Email is required"
-        } else if (!userData.email.match(/^([a-z0-9\.-]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})?$/)) {
+        } else if (!userData.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
             emailError = "Please enter a valid email"
         }
-
-        // if (!userData.password) {
-        //     passwordError = "Password is Required"
-        // } else if (!userData.password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$]).{8,}/)) {
-        //     passwordError = "Password should be alph-numeric"
-        // }
 
         if(!userData.group || userData.group === "Choose..."){
             groupError = "Please select a group"
         }
 
-        if (nameError || emailError /*|| passwordError*/ || groupError) {
-            setError({nameErrorMessage:nameError,emailErrorMessage:emailError/*,passwordErroMessage:passwordError*/,groupErrorMessage:groupError})
+        if (nameError || emailError || groupError) {
+            setError({nameErrorMessage:nameError,emailErrorMessage:emailError,groupErrorMessage:groupError})
             return false
         }
         return true
@@ -114,7 +106,7 @@ function UpdateUser(props) {
                                 </span>
                             </Col>
                             <Col md={6}>
-                                <div style={{ float: "right" }}><Link to="/users/add"><Button variant="outline-primary"><b>New</b></Button></Link></div>
+                                <div style={{ float: "right" }}><Link to="/users/add"><Button variant="outline-primary" ><b>New</b></Button></Link></div>
                             </Col>
                         </Row><hr />
                         <Breadcrumb>
@@ -147,16 +139,6 @@ function UpdateUser(props) {
                                 />
                                  <Form.Control.Feedback type='invalid'>{error.emailErrorMessage}</Form.Control.Feedback>
                             </Form.Group>
-                            {/* <Form.Group>
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control type="text" 
-                                placeholder="Enter Password"
-                                value={userData.password}
-                                onChange={e => setUser({ ...userData, password: e.target.value })}
-                                isInvalid={!!error.passwordErrorMessage}
-                                 />
-                                  <Form.Control.Feedback type='invalid'>{error.passwordErrorMessage}</Form.Control.Feedback>
-                            </Form.Group> */}
                             <Form.Group>
                                 <Form.Label>Choose Group</Form.Label>
                                 <Form.Control as="select" value={userData.group} custom isInvalid={!!error.groupErrorMessage} onChange={e => setUser({ ...userData, group: e.target.value })}>

@@ -53,9 +53,6 @@ function User(props) {
     const user = () => {
         props.history.push("/users")
     }
-    const update = () =>{
-        props.history.push('/users/update')
-    }
     return (
         <React.Fragment>
             <Navbar />
@@ -86,10 +83,10 @@ function User(props) {
                 <Row>
                     <Col md={4}>
                         <ListGroup defaultActiveKey="#link1">
-                            <ListGroup.Item action onClick={dashboard}>Dashboard</ListGroup.Item>
-                            <ListGroup.Item action onClick={page}>Pages</ListGroup.Item>
-                            <ListGroup.Item action onClick={category}>Category</ListGroup.Item>
-                            <ListGroup.Item action active onClick={user}>Users</ListGroup.Item>
+                            <ListGroup.Item action onClick={dashboard}><Speedometer></Speedometer> Dashboard</ListGroup.Item>
+                            <ListGroup.Item action onClick={page}><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item>
+                            <ListGroup.Item action onClick={category}><FolderFill></FolderFill> Category</ListGroup.Item>
+                            <ListGroup.Item action active onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>
                         </ListGroup>
                     </Col>
                     <Col md={8} className="mt-4">
