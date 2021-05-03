@@ -93,7 +93,7 @@ function User(props) {
                         <Row>
                             <Col md={6}>
                                 <span className="page-header" style={{ fontSize: "35px", color: "#1995dc" }}>
-                                    <FileEarmarkFill></FileEarmarkFill>Users
+                                    <PeopleFill></PeopleFill> Users
                                 </span>
                             </Col>
                             <Col md={6}>
