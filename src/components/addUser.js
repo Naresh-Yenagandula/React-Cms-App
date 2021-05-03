@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../components/navbar';
 import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form, Alert } from 'react-bootstrap';
-import { FileEarmarkFill } from 'react-bootstrap-icons';
+import { FileEarmarkFill,Speedometer,PeopleFill,FolderFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
@@ -11,13 +11,13 @@ function AddUser(props) {
     const [userData, setUser] = useState({
         name: '',
         email: '',
-        password:'',
+        password: '',
         group: ''
     })
     const [error, setError] = useState({
         nameErrorMessage: '',
         emailErrorMessage: '',
-        passwordErrorMessage:'',
+        passwordErrorMessage: '',
         groupErroMessage: ''
     });
 
@@ -93,10 +93,10 @@ function AddUser(props) {
                 <Row>
                     <Col md={4}>
                         <ListGroup defaultActiveKey="#link1">
-                            <ListGroup.Item action onClick={dashboard}>Dashboard</ListGroup.Item>
-                            <ListGroup.Item action onClick={page}>Pages</ListGroup.Item>
-                            <ListGroup.Item action onClick={category}>Category</ListGroup.Item>
-                            <ListGroup.Item action active onClick={user}>Users</ListGroup.Item>
+                            <ListGroup.Item action onClick={dashboard}><Speedometer></Speedometer> Dashboard</ListGroup.Item>
+                            <ListGroup.Item action onClick={page}><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item>
+                            <ListGroup.Item action onClick={category}><FolderFill></FolderFill> Category</ListGroup.Item>
+                            <ListGroup.Item action active onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>
                         </ListGroup>
                     </Col>
                     <Col md={8} className="mt-2">
@@ -107,7 +107,7 @@ function AddUser(props) {
                                 </span>
                             </Col>
                             <Col md={6}>
-                                <div style={{ float: "right" }}><Link to="/users/add"><Button variant="outline-primary" onClick={e=>setMessage("")}><b>New</b></Button></Link></div>
+                                <div style={{ float: "right" }}><Link to="/users/add"><Button variant="outline-primary" onClick={e => setMessage("")}><b>New</b></Button></Link></div>
                             </Col>
                         </Row><hr />
                         <Breadcrumb>

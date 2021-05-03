@@ -1,35 +1,35 @@
-import React,{ useEffect }from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Form,Alert} from 'react-bootstrap';
-import { FileEarmarkFill } from 'react-bootstrap-icons';
-import {Link} from 'react-router-dom';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form, Alert } from 'react-bootstrap';
+import { FileEarmarkFill,Speedometer,PeopleFill,FolderFill } from 'react-bootstrap-icons';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 
 function UpdateUser(props) {
     const [userData, setUser] = useState({
-        name:'',
-        email:'',
-        group:''
+        name: '',
+        email: '',
+        group: ''
     })
 
     const [error, setError] = useState({
-        nameErrorMessage:'',
-        emailErrorMessage:'',
-        groupErroMessage:''
+        nameErrorMessage: '',
+        emailErrorMessage: '',
+        groupErroMessage: ''
     });
 
-    useEffect(()=>{
-        axios.get("http://localhost:8081/api/user/"+props.match.params.id)
-        .then((result)=>{
-            setUser(result.data)
-        })
-        .catch((err)=>{
-            setMessage({message:"Something went Wrong",variant:"danger"})
-        })
-    },[props])
+    useEffect(() => {
+        axios.get("http://localhost:8081/api/user/" + props.match.params.id)
+            .then((result) => {
+                setUser(result.data)
+            })
+            .catch((err) => {
+                setMessage({ message: "Something went Wrong", variant: "danger" })
+            })
+    }, [props])
 
-    const [message,setMessage]= useState();
+    const [message, setMessage] = useState();
 
     const dashboard = () => {
         props.history.push("/dashboard")
@@ -45,7 +45,7 @@ function UpdateUser(props) {
     }
 
     const validate = () => {
-        let nameError,emailError,groupError = "";
+        let nameError, emailError, groupError = "";
 
         if (!userData.name) {
             nameError = "Full Name is Required"
@@ -53,18 +53,18 @@ function UpdateUser(props) {
             nameError = "Full Name should contain only alphabets"
         }
 
-        if(!userData.email){
-           emailError = "Email is required"
+        if (!userData.email) {
+            emailError = "Email is required"
         } else if (!userData.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
             emailError = "Please enter a valid email"
         }
 
-        if(!userData.group || userData.group === "Choose..."){
+        if (!userData.group || userData.group === "Choose...") {
             groupError = "Please select a group"
         }
 
         if (nameError || emailError || groupError) {
-            setError({nameErrorMessage:nameError,emailErrorMessage:emailError,groupErrorMessage:groupError})
+            setError({ nameErrorMessage: nameError, emailErrorMessage: emailError, groupErrorMessage: groupError })
             return false
         }
         return true
@@ -76,13 +76,13 @@ function UpdateUser(props) {
         const isValid = validate();
         if (isValid) {
             setError("")
-            axios.put("http://localhost:8081/api/users/"+userData._id,userData)
-            .then((result)=>{
-                setMessage({message:"User Updated Successfully",variant:"success"})
-            })
-            .catch((err)=>{
-                setMessage({message:"Something went wrong",variant:"danger"})
-            })
+            axios.put("http://localhost:8081/api/users/" + userData._id, userData)
+                .then((result) => {
+                    setMessage({ message: "User Updated Successfully", variant: "success" })
+                })
+                .catch((err) => {
+                    setMessage({ message: "Something went wrong", variant: "danger" })
+                })
         }
     }
     return (
@@ -92,10 +92,10 @@ function UpdateUser(props) {
                 <Row>
                     <Col md={4}>
                         <ListGroup defaultActiveKey="#link1">
-                            <ListGroup.Item action onClick={dashboard}>Dashboard</ListGroup.Item>
-                            <ListGroup.Item action  onClick={page}>Pages</ListGroup.Item>
-                            <ListGroup.Item action onClick={category}>Category</ListGroup.Item>
-                            <ListGroup.Item action active onClick={user}>Users</ListGroup.Item>
+                            <ListGroup.Item action onClick={dashboard}><Speedometer></Speedometer> Dashboard</ListGroup.Item>
+                            <ListGroup.Item action onClick={page}><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item>
+                            <ListGroup.Item action onClick={category}><FolderFill></FolderFill> Category</ListGroup.Item>
+                            <ListGroup.Item action active onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>
                         </ListGroup>
                     </Col>
                     <Col md={8} className="mt-2">
@@ -115,44 +115,44 @@ function UpdateUser(props) {
                                 Users
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <h4 style={{color:"#1995dc"}}>Update User</h4>
-                        {message?
-                        <Alert variant={message.variant}>{message.message}</Alert>:
-                        <Form onSubmit={submitData}>
-                            <Form.Group>
-                                <Form.Label>Full Name</Form.Label>
-                                <Form.Control type="text" 
-                                placeholder="Enter Full Name"
-                                value={userData.name}
-                                onChange={e => setUser({ ...userData, name: e.target.value })}
-                                isInvalid={!!error.nameErrorMessage}
-                                 />
-                                 <Form.Control.Feedback type='invalid'>{error.nameErrorMessage}</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control type="email" 
-                                placeholder="Enter Email Id"
-                                value={userData.email}
-                                onChange={e => setUser({ ...userData, email: e.target.value })}
-                                isInvalid={!!error.emailErrorMessage}
-                                />
-                                 <Form.Control.Feedback type='invalid'>{error.emailErrorMessage}</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Choose Group</Form.Label>
-                                <Form.Control as="select" value={userData.group} custom isInvalid={!!error.groupErrorMessage} onChange={e => setUser({ ...userData, group: e.target.value })}>
-                                    <option>Choose...</option>
-                                    <option>Admin</option>
-                                    <option>Registered</option>
-                                </Form.Control>
-                                <Form.Control.Feedback type='invalid'>{error.groupErrorMessage}</Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group style={{textAlign:"center"}}>
-                            <Button variant="primary" type="submit">Update User</Button>
-                            </Form.Group>
-                        </Form>
-                    }
+                        <h4 style={{ color: "#1995dc" }}>Update User</h4>
+                        {message ?
+                            <Alert variant={message.variant}>{message.message}</Alert> :
+                            <Form onSubmit={submitData}>
+                                <Form.Group>
+                                    <Form.Label>Full Name</Form.Label>
+                                    <Form.Control type="text"
+                                        placeholder="Enter Full Name"
+                                        value={userData.name}
+                                        onChange={e => setUser({ ...userData, name: e.target.value })}
+                                        isInvalid={!!error.nameErrorMessage}
+                                    />
+                                    <Form.Control.Feedback type='invalid'>{error.nameErrorMessage}</Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control type="email"
+                                        placeholder="Enter Email Id"
+                                        value={userData.email}
+                                        onChange={e => setUser({ ...userData, email: e.target.value })}
+                                        isInvalid={!!error.emailErrorMessage}
+                                    />
+                                    <Form.Control.Feedback type='invalid'>{error.emailErrorMessage}</Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Choose Group</Form.Label>
+                                    <Form.Control as="select" value={userData.group} custom isInvalid={!!error.groupErrorMessage} onChange={e => setUser({ ...userData, group: e.target.value })}>
+                                        <option>Choose...</option>
+                                        <option>Admin</option>
+                                        <option>Registered</option>
+                                    </Form.Control>
+                                    <Form.Control.Feedback type='invalid'>{error.groupErrorMessage}</Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group style={{ textAlign: "center" }}>
+                                    <Button variant="primary" type="submit">Update User</Button>
+                                </Form.Group>
+                            </Form>
+                        }
                     </Col>
                 </Row>
             </Container>
