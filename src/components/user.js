@@ -5,6 +5,7 @@ import { Speedometer,FolderFill,PeopleFill,FileEarmarkFill,PencilSquare,TrashFil
 import {Link} from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ReactPaginate from 'react-paginate';
 
 function User(props) {
 
@@ -12,12 +13,18 @@ function User(props) {
     const [message, setMessage] = useState()
     const [isLoading, setLoading] = useState(true)
     const [smShow, setSmShow] = useState({ view: false, id: '', message: '' });
+    const [currentPage, setCurrentPage] = useState(0);
+    const [dataLength, setLength] = useState(0);
+    const pageLimit = 5
+    const offset = currentPage * pageLimit;
+    const pageCount = Math.ceil(dataLength / pageLimit)
 
     useEffect(() => {
-        axios.get("http://localhost:8081/api/users/0")
+        axios.get("http://localhost:8081/api/users/"+ offset)
             .then((result) => {
                 setLoading(false)
                 if (result.data.result[0]) {
+                    setLength(result.data.no)
                     setData(result.data.result)
                 } else {
                     setMessage({ message: "No Data", variant: "" })
@@ -27,7 +34,7 @@ function User(props) {
                 setMessage({ message: "Something went wrong", variant: "danger" })
                 setLoading(false)
             })
-    }, [])
+    }, [offset])
 
     const deleteUser = (id) => {
         setSmShow({ view: true, message: "Deleting..." })
@@ -39,6 +46,10 @@ function User(props) {
             .catch((err) => {
                 console.log(err);
             })
+    }
+
+    const pageChange = ({ selected: selectedPage }) => {
+        setCurrentPage(selectedPage);
     }
 
     const dashboard = () => {
@@ -110,6 +121,7 @@ function User(props) {
                           <Row>
                           <Col md={{ span: 6, offset: 5 }}><Spinner animation="border" /></Col>
                           </Row> :
+                         <React.Fragment> 
                         <Table hover size="sm">
                             <thead>
                                 <tr>
@@ -137,6 +149,19 @@ function User(props) {
                                     </tbody>
                                 }
                         </Table>
+                        <ReactPaginate
+                                    previousLabel={"Prev"}
+                                    nextLabel={"Next"}
+                                    pageCount={pageCount}
+                                    onPageChange={pageChange}
+                                    containerClassName={"pagination pagination-sm justify-content-end"}
+                                    pageLinkClassName={"page-link"}
+                                    previousLinkClassName={"page-link"}
+                                    nextLinkClassName={"page-link"}
+                                    disabledClassName={"page-item disabled"}
+                                    activeClassName={"page-item active"}
+                        />
+                        </React.Fragment>
                        }
                     </Col>
                 </Row>
