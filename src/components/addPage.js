@@ -92,7 +92,7 @@ function AddPage(props) {
                             </Col>
                             <Col md={6}>
                                 <div style={{ float: "right" }}><Link to="/pages/add"><Button variant="outline-primary" onClick={e=>setMessage("")}><b>New</b></Button></Link></div>
-                            </Col>
+                                    </Col>
                         </Row><hr />
                         <Breadcrumb>
                             <Breadcrumb.Item href="#">Dashboard</Breadcrumb.Item>

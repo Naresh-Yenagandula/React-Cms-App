@@ -137,7 +137,7 @@ function UpdatePage(props) {
                                 <Form.Control.Feedback type='invalid'>{error.authorErroMessage}</Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group style={{ textAlign: "center" }}>
-                                <Button variant="primary" type="submit">Add Page</Button>
+                                <Button variant="primary" type="submit">Update Page</Button>
                             </Form.Group>
                         </Form>
                     }

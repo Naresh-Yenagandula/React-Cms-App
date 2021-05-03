@@ -1,10 +1,34 @@
 import React from 'react';
+import {useEffect} from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Form } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb,Form,Alert } from 'react-bootstrap';
 import { FileEarmarkFill } from 'react-bootstrap-icons';
 import {Link} from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
+
 
 function UpdateCategory(props) {
+
+    const [categoryData,setCategory]=useState({
+        title:''
+    })
+    const [error, setError] = useState({
+        titleErrorMessage:''
+    });
+
+    const [message,setMessage]= useState();
+    useEffect(()=>{
+        axios.get("http://localhost:8081/api/category/"+props.match.params.id)
+        .then((result)=>{
+            setCategory(result.data)
+        })
+        .catch((err)=>{
+            setMessage({message:"Something went Wrong",variant:"danger"})
+        })
+    },[props])
+    
+
     const dashboard = () => {
         props.history.push("/dashboard")
     }
@@ -16,6 +40,33 @@ function UpdateCategory(props) {
     }
     const user = () => {
         props.history.push("/users")
+    }
+    
+    const validate = () => {
+        let titleError = "";
+
+        if (!categoryData.title) {
+            titleError = "Category is Required"}
+        if (titleError) {
+            setError({titleErrorMessage:titleError})
+            return false
+        }
+        return true
+
+    }
+    const submitData = (e) => {
+        e.preventDefault();
+        const isValid = validate();
+        if (isValid) {
+            setError("")
+            axios.put("http://localhost:8081/api/categories/"+categoryData._id,categoryData)
+            .then((result)=>{
+                setMessage({message:"Category Updated Successfully",variant:"success"})
+            })
+            .catch((err)=>{
+                setMessage({message:"Something went wrong",variant:"danger"})
+            })
+        }
     }
     return (
         <React.Fragment>
@@ -38,7 +89,7 @@ function UpdateCategory(props) {
                                 </span>
                             </Col>
                             <Col md={6}>
-                                <div style={{ float: "right" }}><Link to="/pages/add"><Button variant="outline-primary"><b>New</b></Button></Link></div>
+                                <div style={{ float: "right" }}><Link to="/category/add"><Button variant="outline-primary" onClick={e=>setMessage("")}><b>New</b></Button></Link></div>
                             </Col>
                         </Row><hr />
                         <Breadcrumb>
@@ -48,15 +99,23 @@ function UpdateCategory(props) {
                             </Breadcrumb.Item>
                         </Breadcrumb>
                         <h4 style={{color:"#1995dc"}}>Update Category</h4>
-                        <Form>
+                        {message?
+                        <Alert variant={message.variant}>{message.message}</Alert>:
+                        <Form onSubmit={submitData}>
                             <Form.Group>
                                 <Form.Label>Category</Form.Label>
-                                <Form.Control type="text" placeholder="Enter Category" />
+                                <Form.Control type="text" placeholder="Enter Category" 
+                                 value={categoryData.title}
+                                 onChange={e => setCategory({ ...categoryData, title: e.target.value })}
+                                 isInvalid={!!error.titleErrorMessage}
+                             />
+                             <Form.Control.Feedback type='invalid'>{error.titleErrorMessage}</Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group style={{textAlign:"center"}}>
-                            <Button variant="primary">Update Category</Button>
+                            <Button variant="primary" type="submit">Update Category</Button>
                             </Form.Group>
                         </Form>
+                       }
                     </Col>
                 </Row>
             </Container>

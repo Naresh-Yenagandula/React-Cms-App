@@ -1,28 +1,67 @@
-import React from 'react';
-import { Container, Row, Col,Card,Button,Form } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 
 function Login() {
+    const [loginData, setLoginData] = useState({ email: '', password: '' })
+    const [error, setError] = useState({ emailErrorMessage: '', passwordErrorMessage: '' })
+
+    const validate = () => {
+        let emailError, passwordError = ''
+
+        if (!loginData.email) {
+            emailError = "Email id is Required"
+        }
+        if (!loginData.password) {
+            passwordError = "Password is Required"
+        }
+
+        if (emailError || passwordError) {
+            setError({ emailErrorMessage: emailError, passwordErrorMessage: passwordError })
+            return false;
+        }
+        return true;
+    }
+
+    const loginCheck = (e) => {
+        e.preventDefault()
+        const isValid = validate();
+        if (isValid) {
+            console.log(loginData);
+        }
+    }
     return (
-        <div style={{paddingTop:"10%"}}>
+        <div style={{ paddingTop: "10%" }}>
             <Container>
                 <Row>
                     <Col md={4}></Col>
                     <Col md={4} className="mt-4">
-                        <Card className="text-center" style={{boxShadow:"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"}}>
-                        <Form>
-                            <Card.Header>DCX CMS</Card.Header>
-                            <Card.Body>
+                        <Card className="text-center" style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
+                            <Form onSubmit={loginCheck}>
+                                <Card.Header>DCX CMS</Card.Header>
+                                <Card.Body>
                                     <Form.Group>
-                                        <Form.Control type="email" placeholder="Enter your Email" />
+                                        <Form.Control
+                                            type="email"
+                                            placeholder="Enter your Email"
+                                            isInvalid={!!error.emailErrorMessage}
+                                            onChange={e => setLoginData({ ...loginData, email: e.target.value })}
+                                        />
+                                        <Form.Control.Feedback type="invalid">{error.emailErrorMessage}</Form.Control.Feedback>
                                     </Form.Group>
                                     <Form.Group>
-                                        <Form.Control type="password" placeholder="Enter Password" />
+                                        <Form.Control
+                                            type="password"
+                                            placeholder="Enter Password"
+                                            isInvalid={!!error.passwordErrorMessage}
+                                            onChange={e => setLoginData({ ...loginData, password: e.target.value })}
+                                        />
+                                        <Form.Control.Feedback type="invalid">{error.passwordErrorMessage}</Form.Control.Feedback>
                                     </Form.Group>
-                            </Card.Body>
-                            <Card.Footer>
-                                <Button block>Sign In</Button>
-                            </Card.Footer>
-                        </Form>
+                                </Card.Body>
+                                <Card.Footer>
+                                    <Button block type="submit">Sign In</Button>
+                                </Card.Footer>
+                            </Form>
                         </Card>
                     </Col>
                 </Row>
