@@ -35,15 +35,16 @@ function Login() {
                 <Row>
                     <Col md={4}></Col>
                     <Col md={4} className="mt-4">
-                        <Card className="text-center" style={{ boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
+                        <Card style={{ borderRadius:"10px",boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
                             <Form onSubmit={loginCheck}>
-                                <Card.Header>DCX CMS</Card.Header>
                                 <Card.Body>
+                                    <Card.Title className=" text-center p-2">DCX CMS</Card.Title>
                                     <Form.Group>
                                         <Form.Control
                                             type="email"
                                             placeholder="Enter your Email"
                                             isInvalid={!!error.emailErrorMessage}
+                                            autoFocus
                                             onChange={e => setLoginData({ ...loginData, email: e.target.value })}
                                         />
                                         <Form.Control.Feedback type="invalid">{error.emailErrorMessage}</Form.Control.Feedback>
@@ -57,10 +58,8 @@ function Login() {
                                         />
                                         <Form.Control.Feedback type="invalid">{error.passwordErrorMessage}</Form.Control.Feedback>
                                     </Form.Group>
+                                    <Button block type="submit" style={{borderRadius:"20px"}}>SIGN IN</Button>
                                 </Card.Body>
-                                <Card.Footer>
-                                    <Button block type="submit">Sign In</Button>
-                                </Card.Footer>
                             </Form>
                         </Card>
                     </Col>
