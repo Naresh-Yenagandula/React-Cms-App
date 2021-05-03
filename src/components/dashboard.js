@@ -4,7 +4,6 @@ import { Container, Row, Col, ListGroup, Table, Button,Spinner } from 'react-boo
 import { Speedometer, FileEarmarkFill,FolderFill,PeopleFill } from 'react-bootstrap-icons'
 import axios from 'axios';
 
-
 function Dashboard(props) {
     const [pageData, setPage] = useState([]);
     const [userData, setUser] = useState([]);
@@ -22,6 +21,7 @@ function Dashboard(props) {
                 }else{
                     setMessagePage("No Data")
                 }
+                
             })
             .catch((err) => {
                 setLoading(false)
@@ -47,7 +47,7 @@ function Dashboard(props) {
     }
 
     useEffect(() => {
-        getPages();
+        getPages()
         getUsers()
     }, [])
 
