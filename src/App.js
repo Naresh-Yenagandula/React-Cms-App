@@ -29,7 +29,7 @@ function App() {
            <Route exact path="/category/update/:id" component={UpdateCategory} />
            <Route exact path="/category/add" component={AddCategory} />
            <Route exact path="/users/add" component={AddUser} />
-           <Route exact path="/users/update" component={UpdateUser} />
+           <Route exact path="/users/update/:id" component={UpdateUser} />
          </Switch>
        </Router>
     </React.Fragment>

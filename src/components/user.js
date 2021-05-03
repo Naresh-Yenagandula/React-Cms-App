@@ -1,10 +1,46 @@
-import React from 'react';
+
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Table } from 'react-bootstrap';
-import { FileEarmarkFill,PencilSquare,TrashFill } from 'react-bootstrap-icons';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb,Table,Alert, Spinner, Modal } from 'react-bootstrap';
+import { Speedometer,FolderFill,PeopleFill,FileEarmarkFill,PencilSquare,TrashFill } from 'react-bootstrap-icons';
 import {Link} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function User(props) {
+
+    const [userData, setData] = useState([])
+    const [message, setMessage] = useState()
+    const [isLoading, setLoading] = useState(true)
+    const [smShow, setSmShow] = useState({ view: false, id: '', message: '' });
+
+    useEffect(() => {
+        axios.get("http://localhost:8081/api/users/0")
+            .then((result) => {
+                setLoading(false)
+                if (result.data.result[0]) {
+                    setData(result.data.result)
+                } else {
+                    setMessage({ message: "No Data", variant: "" })
+                }
+            })
+            .catch((err) => {
+                setMessage({ message: "Something went wrong", variant: "danger" })
+                setLoading(false)
+            })
+    }, [])
+
+    const deleteUser = (id) => {
+        setSmShow({ view: true, message: "Deleting..." })
+        axios.delete("http://localhost:8081/api/users/" + id)
+            .then((result) => {
+                setData(userData.filter(user => user._id !== id));
+                setSmShow({ view: true, message: "User Deleted SuccessFully" })
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
     const dashboard = () => {
         props.history.push("/dashboard")
     }
@@ -23,6 +59,29 @@ function User(props) {
     return (
         <React.Fragment>
             <Navbar />
+            <Modal
+                size="sm"
+                show={smShow.view}
+                onHide={() => setSmShow({ view: false })}
+                animation={false}
+                centered
+                aria-labelledby="example-modal-sizes-title-sm"
+            >
+                {smShow.message ?
+                    <Modal.Header closeButton>
+                        {smShow.message}
+                    </Modal.Header> :
+                    <React.Fragment>
+                        <Modal.Header closeButton>
+                            Are you sure you want to delete this User?
+                        </Modal.Header>
+                        <Modal.Footer>
+                            <Button variant="danger" size="sm" onClick={() => { deleteUser(smShow.id) }}>Delete</Button>
+                            <Button variant="warning" size="sm" onClick={() => { setSmShow({ view: false, id: '', message: '' }) }}>Cancel</Button>
+                        </Modal.Footer>
+                    </React.Fragment>
+                }
+            </Modal>
             <Container className='mt-4'>
                 <Row>
                     <Col md={4}>
@@ -50,6 +109,10 @@ function User(props) {
                                 Users
                             </Breadcrumb.Item>
                         </Breadcrumb>
+                        {isLoading ?
+                          <Row>
+                          <Col md={{ span: 6, offset: 5 }}><Spinner animation="border" /></Col>
+                          </Row> :
                         <Table hover size="sm">
                             <thead>
                                 <tr>
@@ -60,16 +123,24 @@ function User(props) {
                                     <th>Delete</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td><Button size="sm" onClick={update}><PencilSquare></PencilSquare></Button></td>
-                                    <td><Button size="sm"><TrashFill></TrashFill></Button></td>
-                                </tr>
-                            </tbody>
+                            {message ?
+                                    <tbody><tr><td colSpan="5" className="text-center"><Alert variant={message.variant}>{message.message}</Alert></td></tr></tbody> :
+                                    <tbody>
+                                        {userData.map((user) => {
+                                            return (
+                                                <tr key={user._id}>
+                                                    <td>{user.name}</td>
+                                                    <td>{user.email}</td>
+                                                    <td>{user.group}</td>
+                                                    <td><Link to={`users/update/${user._id}`}><Button size="sm" variant="outline-info"><PencilSquare></PencilSquare></Button></Link></td>
+                                                    <td><Button variant="outline-danger" onClick={() => setSmShow({ view: true, id: `${user._id}`, message: '' })} size="sm"><TrashFill></TrashFill></Button></td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                }
                         </Table>
+                       }
                     </Col>
                 </Row>
             </Container>

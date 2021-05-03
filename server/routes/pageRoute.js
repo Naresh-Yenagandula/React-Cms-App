@@ -19,6 +19,23 @@ router.post('/pages',async (req,res)=>{
     }
 });
 
+//add user in DB
+router.post('/users',async (req,res)=>{
+    const users = new User({
+        name:req.body.name,
+        email:req.body.email,
+        password:req.body.password,
+        group:req.body.group
+    });
+    try {
+        const userSave = await users.save();
+        res.json({message:"Added"});
+    } catch (error) {
+        // res.status(400).json({message:"Failed to add user"})
+        res.status(400).json({message:"Failed to add user"})
+    }
+});
+
 //add category in DB
 router.post('/categories',async (req,res)=>{
     const catg = new categories({
@@ -118,7 +135,7 @@ router.put('/users/:id',async (req,res)=>{
     try {
         const data = await User.findByIdAndUpdate(req.params.id,{
             $set:{name:req.body.name, email:req.body.email, group:req.body.group}
-        });
+        },{useFindAndModify: false});
         return res.status(200).json({message:"Updated"});
     } catch (error) {
         console.log("Fail to update user");
