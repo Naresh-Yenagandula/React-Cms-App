@@ -46,7 +46,7 @@ function App() {
 
   return (
     <React.Fragment>
-      <UserContext.Provider value={{isAuth:auth,isLoading:loading,userName:userData.name,userRole:userData.group}}>
+      <UserContext.Provider value={{isAuth:auth,isLoading:loading,userName:userData.name,userRole:userData.group,callAuth:authToken}}>
         <Router>
           <Switch>
             <Route exact path="/" component={Dashboard} />

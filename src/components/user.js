@@ -5,6 +5,8 @@ import { Speedometer,FolderFill,PeopleFill,FileEarmarkFill,PencilSquare,TrashFil
 import {Link} from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useContext } from 'react';
+import { UserContext } from '../App';
 
 function User(props) {
 
@@ -12,8 +14,13 @@ function User(props) {
     const [message, setMessage] = useState()
     const [isLoading, setLoading] = useState(true)
     const [smShow, setSmShow] = useState({ view: false, id: '', message: '' });
+    const value = useContext(UserContext)
 
     useEffect(() => {
+        if(!value.isAuth && !value.isLoading){
+            props.history.push('/login')
+            return false
+        }
         axios.get("http://localhost:8081/api/users/0")
             .then((result) => {
                 setLoading(false)
@@ -27,7 +34,7 @@ function User(props) {
                 setMessage({ message: "Something went wrong", variant: "danger" })
                 setLoading(false)
             })
-    }, [])
+    }, [value,props])
 
     const deleteUser = (id) => {
         setSmShow({ view: true, message: "Deleting..." })

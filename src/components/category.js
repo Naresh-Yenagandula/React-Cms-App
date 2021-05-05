@@ -5,14 +5,21 @@ import { Container, Row, Col, ListGroup, Button, Breadcrumb, Table, Alert, Modal
 import { Speedometer, FileEarmarkFill, FolderFill, PeopleFill,TrashFill,PencilSquare } from 'react-bootstrap-icons'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useContext } from 'react';
+import { UserContext } from '../App';
 
 function Category(props) {
     const [categoryData, setData] = useState([])
     const [message, setMessage] = useState()
     const [isLoading, setLoading] = useState(true)
     const [smShow, setSmShow] = useState({ view: false, id: '', message: '' });
+    const value=useContext(UserContext)
 
     useEffect(() => {
+        if(!value.isAuth && !value.isLoading){
+            props.history.push('/login')
+            return false
+        }
         axios.get("http://localhost:8081/api/categories/0")
             .then((result) => {
                 setLoading(false)
@@ -26,7 +33,7 @@ function Category(props) {
                 setMessage({ message: "Something went wrong", variant: "danger" })
                 setLoading(false)
             })
-    }, [])
+    }, [props,value])
     const deleteCategory = (id) => {
         setSmShow({ view: true, message: "Deleting..." })
         axios.delete("http://localhost:8081/api/categories/" + id)
@@ -84,7 +91,9 @@ function Category(props) {
                             <ListGroup.Item action onClick={dashboard}><Speedometer></Speedometer> Dashboard</ListGroup.Item>
                             <ListGroup.Item action onClick={page}><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item>
                             <ListGroup.Item action active onClick={category}><FolderFill></FolderFill> Category</ListGroup.Item>
-                            <ListGroup.Item action onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>
+                            {value.userRole==="Admin"?
+                            <ListGroup.Item action onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>:
+                            null}
                         </ListGroup>
                     </Col>
                     <Col md={8} className="mt-4">

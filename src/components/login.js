@@ -38,7 +38,7 @@ function Login(props) {
             axios.post("http://localhost:8081/authApi/login",loginData)
             .then((result)=>{
                 localStorage.setItem('token',result.data)
-                value.isAuth=true
+                value.callAuth()
                 props.history.push("/dashboard")
             })
             .catch((err)=>{
