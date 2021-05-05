@@ -1,8 +1,11 @@
 import React from 'react';
+import { useContext } from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+import { UserContext } from '../App';
 
 function Navbars() {
+    const value = useContext(UserContext)
     return(
         <React.Fragment >
             <Navbar collapseOnSelect expand="lg" style={{backgroundColor:"#1995dc"}} variant="dark">
@@ -16,6 +19,7 @@ function Navbars() {
                         <NavLink className="nav-link" activeClassName="nav-link active" to="/users">Users</NavLink>
                     </Nav>
                     <Navbar.Text>
+                        <span>{value.userName} </span>
                         <NavLink to="/login">Logout</NavLink>
                     </Navbar.Text>
                 </Navbar.Collapse>

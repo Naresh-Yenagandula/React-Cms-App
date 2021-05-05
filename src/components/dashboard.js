@@ -3,6 +3,9 @@ import Navbar from '../components/navbar';
 import { Container, Row, Col, ListGroup, Table, Button,Spinner } from 'react-bootstrap';
 import { Speedometer, FileEarmarkFill,FolderFill,PeopleFill } from 'react-bootstrap-icons'
 import axios from 'axios';
+// UserContext
+import { useContext } from 'react';
+import { UserContext } from '../App';
 
 function Dashboard(props) {
     const [pageData, setPage] = useState([]);
@@ -10,6 +13,7 @@ function Dashboard(props) {
     const [isLoading,setLoading] = useState(true);
     const [messagePage,setMessagePage] = useState("")
     const [messageUser,setMessageUser]  =useState("")
+    const value = useContext(UserContext)
 
     const getPages = () => {
         axios.get("http://localhost:8081/api/pages")
@@ -47,9 +51,14 @@ function Dashboard(props) {
     }
 
     useEffect(() => {
+        if(!value.isAuth && !value.isLoading){
+            props.history.push('/login')
+            return false
+        }
+        // console.log(isAuth,isAuthLoading);
         getPages()
         getUsers()
-    }, [])
+    }, [value,props])
 
     const dashboard = () => {
         props.history.push("/dashboard")
