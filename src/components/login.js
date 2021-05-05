@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useContext, useState,useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { UserContext } from '../App';
 
-function Login() {
+function Login(props) {
     const [loginData, setLoginData] = useState({ email: '', password: '' })
     const [error, setError] = useState({ emailErrorMessage: '', passwordErrorMessage: '' })
+    const value = useContext(UserContext)
+
+    useEffect(() => {
+        if(value.isAuth){
+            props.history.push("/dashboard")
+        }
+    }, [value,props])
 
     const validate = () => {
         let emailError, passwordError = ''
@@ -26,7 +35,15 @@ function Login() {
         e.preventDefault()
         const isValid = validate();
         if (isValid) {
-            console.log(loginData);
+            axios.post("http://localhost:8081/authApi/login",loginData)
+            .then((result)=>{
+                localStorage.setItem('token',result.data)
+                value.callAuth()
+                props.history.push("/dashboard")
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
         }
     }
     return (

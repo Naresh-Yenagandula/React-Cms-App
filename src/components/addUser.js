@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Navbar from '../components/navbar';
 import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form, Alert } from 'react-bootstrap';
 import { FileEarmarkFill,Speedometer,PeopleFill,FolderFill } from 'react-bootstrap-icons';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
+import { UserContext } from '../App';
 
 function AddUser(props) {
 
@@ -21,6 +22,7 @@ function AddUser(props) {
         groupErroMessage: ''
     });
 
+    const value=useContext(UserContext)
     const [message, setMessage] = useState();
 
     const dashboard = () => {
@@ -76,7 +78,7 @@ function AddUser(props) {
         if (isValid) {
             console.log(userData);
             setError("")
-            axios.post("http://localhost:8081/api/users", userData)
+            axios.post("http://localhost:8081/authApi/register", userData)
                 .then((result) => {
                     setMessage({ message: "User Added Successfully", variant: "success" })
                 })
@@ -96,7 +98,9 @@ function AddUser(props) {
                             <ListGroup.Item action onClick={dashboard}><Speedometer></Speedometer> Dashboard</ListGroup.Item>
                             <ListGroup.Item action onClick={page}><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item>
                             <ListGroup.Item action onClick={category}><FolderFill></FolderFill> Category</ListGroup.Item>
-                            <ListGroup.Item action active onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>
+                            {value.userRole==="Admin"?
+                            <ListGroup.Item action onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>:
+                            null}
                         </ListGroup>
                     </Col>
                     <Col md={8} className="mt-2">

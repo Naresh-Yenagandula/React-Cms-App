@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Table, Button,Spinner } from 'react-bootstrap';
-import { Speedometer, FileEarmarkFill,FolderFill,PeopleFill } from 'react-bootstrap-icons'
+import { Container, Row, Col, ListGroup, Table, Button, Spinner } from 'react-bootstrap';
+import { Speedometer, FileEarmarkFill, FolderFill, PeopleFill } from 'react-bootstrap-icons'
 import axios from 'axios';
+// UserContext
+import { useContext } from 'react';
+import { UserContext } from '../App';
 
 function Dashboard(props) {
     const [pageData, setPage] = useState([]);
     const [userData, setUser] = useState([]);
-    const [isLoading,setLoading] = useState(true);
-    const [messagePage,setMessagePage] = useState("")
-    const [messageUser,setMessageUser]  =useState("")
+    const [isLoading, setLoading] = useState(true);
+    const [messagePage, setMessagePage] = useState("")
+    const [messageUser, setMessageUser] = useState("")
+    const value = useContext(UserContext)
 
     const getPages = () => {
         axios.get("http://localhost:8081/api/pages")
             .then((result) => {
                 setLoading(false)
                 setMessagePage("")
-                if(result.data[0]){
+                if (result.data[0]) {
                     setPage(result.data)
-                }else{
+                } else {
                     setMessagePage("No Data")
                 }
-                
+
             })
             .catch((err) => {
                 setLoading(false)
@@ -34,9 +38,9 @@ function Dashboard(props) {
             .then((result) => {
                 setLoading(false)
                 setMessageUser("")
-                if(result.data[0]){
+                if (result.data[0]) {
                     setUser(result.data)
-                }else{
+                } else {
                     setMessageUser("No Data")
                 }
             })
@@ -47,9 +51,14 @@ function Dashboard(props) {
     }
 
     useEffect(() => {
+        if (!value.isAuth && !value.isLoading) {
+            props.history.push('/login')
+            return false
+        }
+        // console.log(isAuth,isAuthLoading);
         getPages()
         getUsers()
-    }, [])
+    }, [value, props])
 
     const dashboard = () => {
         props.history.push("/dashboard")
@@ -73,7 +82,9 @@ function Dashboard(props) {
                             <ListGroup.Item action active onClick={dashboard}><Speedometer></Speedometer> Dashboard</ListGroup.Item>
                             <ListGroup.Item action onClick={page}><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item>
                             <ListGroup.Item action onClick={category}><FolderFill></FolderFill> Category</ListGroup.Item>
-                            <ListGroup.Item action onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>
+                            {value.userRole==="Admin"?
+                            <ListGroup.Item action onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>:
+                            null}
                         </ListGroup>
                     </Col>
                     <Col md={8}>
@@ -87,60 +98,60 @@ function Dashboard(props) {
                             </Col>
                         </Row><hr />
                         <h4 className="lead" style={{ color: "#1995dc" }}><b>Latest Pages</b></h4>
-                        {isLoading?
-                        <Spinner animation="border" />:
-                        <Table size="sm" hover>
-                            <thead>
-                                <tr>
-                                    <th>Page Title</th>
-                                    <th>Category</th>
-                                    <th>Author</th>
-                                </tr>
-                            </thead>
-                            {messagePage?
-                            <tbody><tr><td colSpan="3" className="text-center">{messagePage}</td></tr></tbody>:
-                            <tbody>
-                                {pageData.map((page, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{page.title}</td>
-                                            <td>{page.category}</td>
-                                            <td>{page.author}</td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                            }
-                        </Table>
+                        {isLoading ?
+                            <Spinner animation="border" /> :
+                            <Table size="sm" hover>
+                                <thead>
+                                    <tr>
+                                        <th>Page Title</th>
+                                        <th>Category</th>
+                                        <th>Author</th>
+                                    </tr>
+                                </thead>
+                                {messagePage ?
+                                    <tbody><tr><td colSpan="3" className="text-center">{messagePage}</td></tr></tbody> :
+                                    <tbody>
+                                        {pageData.map((page, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{page.title}</td>
+                                                    <td>{page.category}</td>
+                                                    <td>{page.author}</td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                }
+                            </Table>
                         }<br />
                         <Button variant="outline-primary" disabled={messagePage}>View All Pages</Button>
                         <hr />
                         <h4 className="lead" style={{ color: "#1995dc" }}><b>Latest Users</b></h4>
-                        {isLoading?
-                        <Spinner animation="border" />:
-                        <Table size="sm" hover>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Group</th>
-                                </tr>
-                            </thead>
-                            {messageUser?
-                            <tbody><tr><td colSpan="3" className="text-center">{messageUser}</td></tr></tbody>:
-                            <tbody>
-                                {userData.map((user, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>{user.name}</td>
-                                            <td>{user.email}</td>
-                                            <td>{user.group}</td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                            }
-                        </Table>
+                        {isLoading ?
+                            <Spinner animation="border" /> :
+                            <Table size="sm" hover>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Group</th>
+                                    </tr>
+                                </thead>
+                                {messageUser ?
+                                    <tbody><tr><td colSpan="3" className="text-center">{messageUser}</td></tr></tbody> :
+                                    <tbody>
+                                        {userData.map((user, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{user.name}</td>
+                                                    <td>{user.email}</td>
+                                                    <td>{user.group}</td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                }
+                            </Table>
                         }
                         <br />
                         <Button variant="outline-primary" disabled={messageUser}>View All Users</Button>

@@ -19,10 +19,13 @@ import {
   PeopleFill,
   TrashFill,
   PencilSquare,
+  NodePlusFill,
 } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
+import { useContext } from "react";
+import { UserContext } from "../App";
 
 function Page(props) {
   const [pageData, setData] = useState([]);
@@ -34,8 +37,13 @@ function Page(props) {
   const pageLimit = 5;
   const offset = currentPage * pageLimit;
   const pageCount = Math.ceil(dataLength / pageLimit);
+  const value=useContext(UserContext)
 
   useEffect(() => {
+    if (!value.isAuth && !value.isLoading) {
+        props.history.push('/login')
+        return false
+    }
     axios
       .get("http://localhost:8081/api/pages/" + offset)
       .then((result) => {
@@ -51,7 +59,7 @@ function Page(props) {
         setMessage({ message: "Something went wrong", variant: "danger" });
         setLoading(false);
       });
-  }, [offset]);
+  }, [offset,props,value]);
 
   const deletePage = (id) => {
     setSmShow({ view: true, message: "Deleting..." });
@@ -136,9 +144,11 @@ function Page(props) {
               <ListGroup.Item action onClick={category}>
                 <FolderFill></FolderFill> Category
               </ListGroup.Item>
-              <ListGroup.Item action onClick={user}>
-                <PeopleFill></PeopleFill> Users
-              </ListGroup.Item>
+              {value.userRole==="Admin"?
+                            <ListGroup.Item action onClick={user}>
+                                <PeopleFill></PeopleFill> Users
+                            </ListGroup.Item>:
+                            null}
             </ListGroup>
           </Col>
           <Col md={8} className="mt-4">

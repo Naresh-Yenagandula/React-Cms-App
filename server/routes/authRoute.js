@@ -34,7 +34,7 @@ router.post('/login',async (req,res)=>{
     if(!user) return res.status(400).json({message:'User not exists'});  
 
     const validPassword = await bcrypt.compare(req.body.password,user.password);
-    if(!validPassword) return res.status(400).json({message:'Email and password combination does not match'});
+    if(!validPassword) return res.status(400).json('Email and password combination does not match');
 
     //generates token with user id
     const token = await jwt.sign({_id:user._id},process.env.TOKEN_SECRET,{expiresIn:'24h'});

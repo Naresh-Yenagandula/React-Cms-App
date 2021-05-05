@@ -6,7 +6,8 @@ import {Link} from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
-
+import { useContext } from 'react';
+import { UserContext } from '../App';
 function User(props) {
 
     const [userData, setData] = useState([])
@@ -18,8 +19,13 @@ function User(props) {
     const pageLimit = 5
     const offset = currentPage * pageLimit;
     const pageCount = Math.ceil(dataLength / pageLimit)
+    const value=useContext(UserContext)
 
     useEffect(() => {
+        if (!value.isAuth && !value.isLoading) {
+            props.history.push('/login')
+            return false
+        }
         axios.get("http://localhost:8081/api/users/"+ offset)
             .then((result) => {
                 setLoading(false)
@@ -34,7 +40,7 @@ function User(props) {
                 setMessage({ message: "Something went wrong", variant: "danger" })
                 setLoading(false)
             })
-    }, [offset])
+    }, [offset,props,value])
 
     const deleteUser = (id) => {
         setSmShow({ view: true, message: "Deleting..." })
