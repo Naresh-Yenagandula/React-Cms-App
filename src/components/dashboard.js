@@ -125,6 +125,8 @@ function Dashboard(props) {
                             </Table>
                         }<br />
                         <Button variant="outline-primary" disabled={messagePage}>View All Pages</Button>
+                        {value.userRole==="Admin"?
+                        <>
                         <hr />
                         <h4 className="lead" style={{ color: "#1995dc" }}><b>Latest Users</b></h4>
                         {isLoading ?
@@ -155,6 +157,8 @@ function Dashboard(props) {
                         }
                         <br />
                         <Button variant="outline-primary" disabled={messageUser}>View All Users</Button>
+                        </>:
+                        null}
                     </Col>
                 </Row>
             </Container>
