@@ -66,7 +66,7 @@ function Dashboard(props) {
     return (
         <React.Fragment>
             <Navbar />
-            <Container className='mt-4'>
+            <Container className='mt-4 mb-4'>
                 <Row>
                     <Col md={4}>
                         <ListGroup defaultActiveKey="#link1">

@@ -36,7 +36,7 @@ function Login() {
                     <Col md={4}></Col>
                     <Col md={4} className="mt-4">
                         <Card style={{ borderRadius:"10px",boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
-                            <Form onSubmit={loginCheck}>
+                            <Form onSubmit={loginCheck} >
                                 <Card.Body>
                                     <Card.Title className=" text-center p-2">DCX CMS</Card.Title>
                                     <Form.Group>
