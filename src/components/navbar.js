@@ -12,7 +12,7 @@ function Navbars() {
         value.isAuth = false
         value.userName = ""
         value.userRole = ""
-        // history.push("/login")
+        console.log(value.userName);
         
     }
     return (
@@ -35,8 +35,8 @@ function Navbars() {
                         </Nav>
                     }
                     <Navbar.Text>
-                        <span>{value.userName} </span>
-                        <NavLink to="#" onClick={logout}>Logout</NavLink>
+                        <span title="userName">{value.userName}</span>
+                        <NavLink title="logout" to="#" onClick={logout}>Logout</NavLink>
                     </Navbar.Text>
                 </Navbar.Collapse>
             </Navbar>
