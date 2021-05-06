@@ -124,7 +124,7 @@ function Dashboard(props) {
                                 }
                             </Table>
                         }<br />
-                        <Button variant="outline-primary" disabled={messagePage}>View All Pages</Button>
+                        <Button title="pages" variant="outline-primary" disabled={messagePage}>View All Pages</Button>
                         {value.userRole==="Admin"?
                         <>
                         <hr />
@@ -156,7 +156,7 @@ function Dashboard(props) {
                             </Table>
                         }
                         <br />
-                        <Button variant="outline-primary" disabled={messageUser}>View All Users</Button>
+                        <Button title="users" variant="outline-primary" disabled={messageUser}>View All Users</Button>
                         </>:
                         null}
                     </Col>

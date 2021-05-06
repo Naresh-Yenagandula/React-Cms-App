@@ -1,17 +1,17 @@
 import React, { useEffect, useCallback, useState } from 'react';
-import Login from './components/login';
-import { BrowserRouter as Router, Switch, Route,Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import User from './components/user';
+import AddUser from './components/addUser';
+import UpdateUser from './components/updateUser';
+import axios from 'axios';
 import Dashboard from './components/dashboard';
 import Page from './components/page';
 import Category from './components/category';
-import User from './components/user';
+import Login from './components/login';
 import AddPage from './components/addPage';
 import UpdatePage from './components/updatePage';
 import UpdateCategory from './components/updateCategory';
 import AddCategory from './components/categoryAdd';
-import AddUser from './components/addUser';
-import UpdateUser from './components/updateUser';
-import axios from 'axios';
 
 export const UserContext = React.createContext()
 
@@ -41,7 +41,7 @@ function App() {
 
 
   if (!auth && loading === true) {
-    return (<div style={{display:"flex",justifyContent:"center",top:"40%"}}><p>Checking....</p></div>)
+    return (<div style={{ display: "flex", justifyContent: "center", top: "40%" }}><p>Checking....</p></div>)
   } else {
 
     return (
@@ -54,18 +54,18 @@ function App() {
               <Route exact path="/login" component={Login} />
               <Route exact path="/pages" component={Page} />
               <Route exact path="/category" component={Category} />
-              <Route exact path="/users">
-                {userData.group==="Admin"?<User />:<Redirect to="/dashboard" />}
-              </Route>
               <Route exact path="/pages/add" component={AddPage} />
               <Route exact path="/pages/update/:id" component={UpdatePage} />
               <Route exact path="/category/update/:id" component={UpdateCategory} />
               <Route exact path="/category/add" component={AddCategory} />
+              <Route exact path="/users">
+                {userData.group === "Admin" ? <User /> : <Redirect to="/dashboard" />}
+              </Route>
               <Route exact path="/users/add">
-                {userData.group==="Admin"?<AddUser />:<Redirect to="/dashboard" />}
+                {userData.group === "Admin" ? <AddUser /> : <Redirect to="/dashboard" />}
               </Route>
               <Route exact path="/users/update/:id">
-                {userData.group==="Admin"?<UpdateUser />:<Redirect to="/dashboard" />}
+                {userData.group === "Admin" ? <UpdateUser /> : <Redirect to="/dashboard" />}
               </Route>
             </Switch>
           </Router>

@@ -50,11 +50,13 @@ function Page(props) {
         if (result.data.result[0]) {
           setLength(result.data.no);
           setData(result.data.result);
+          setMessage("")
         } else {
           setMessage({ message: "No Data", variant: "" });
         }
       })
       .catch((err) => {
+        console.log(err);
         setMessage({ message: "Something went wrong", variant: "danger" });
         setLoading(false);
       });

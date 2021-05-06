@@ -56,27 +56,29 @@ function Login(props) {
                         <Card style={{ borderRadius:"10px",boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)" }}>
                             <Form onSubmit={loginCheck} >
                                 <Card.Body>
-                                    <Card.Title className=" text-center p-2">DCX CMS</Card.Title>
+                                    <Card.Title title="login" className=" text-center p-2">DCX CMS</Card.Title>
                                     <Form.Group>
                                         <Form.Control
+                                            title="email"
                                             type="email"
                                             placeholder="Enter your Email"
                                             isInvalid={!!error.emailErrorMessage}
                                             autoFocus
                                             onChange={e => setLoginData({ ...loginData, email: e.target.value })}
                                         />
-                                        <Form.Control.Feedback type="invalid">{error.emailErrorMessage}</Form.Control.Feedback>
+                                        <Form.Control.Feedback title="emailError" type="invalid">{error.emailErrorMessage}</Form.Control.Feedback>
                                     </Form.Group>
                                     <Form.Group>
                                         <Form.Control
+                                            title="password"
                                             type="password"
                                             placeholder="Enter Password"
                                             isInvalid={!!error.passwordErrorMessage}
                                             onChange={e => setLoginData({ ...loginData, password: e.target.value })}
                                         />
-                                        <Form.Control.Feedback type="invalid">{error.passwordErrorMessage}</Form.Control.Feedback>
+                                        <Form.Control.Feedback title="passwordError" type="invalid">{error.passwordErrorMessage}</Form.Control.Feedback>
                                     </Form.Group>
-                                    <Button block type="submit" style={{borderRadius:"20px"}}>SIGN IN</Button>
+                                    <Button title="sign" block type="submit" style={{borderRadius:"20px"}}>SIGN IN</Button>
                                 </Card.Body>
                             </Form>
                         </Card>

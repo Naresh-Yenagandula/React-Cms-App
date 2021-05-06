@@ -1,0 +1,76 @@
+import React from 'react';
+import { render, waitFor, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect'
+import Login from '../components/login';
+import { BrowserRouter } from 'react-router-dom'
+import { UserContext } from '../App'
+
+describe("Check Login placeholder", () => {
+    it('check title', async () => {
+        render(
+            <BrowserRouter>
+                <UserContext.Provider value={{ userRole: "Admin", isAuth: false, isLoading: false }}>
+                    <Login />
+                </UserContext.Provider>
+            </BrowserRouter>
+        )
+        await waitFor(() => screen.getByTitle('login'))
+        expect(screen.getByTitle('login').innerHTML).toBe('DCX CMS')
+    })
+
+    it('check email placeholders',async()=>{
+        render(
+            <BrowserRouter>
+                <UserContext.Provider value={{ userRole: "Admin", isAuth: false, isLoading: false }}>
+                    <Login />
+                </UserContext.Provider>
+            </BrowserRouter>
+        )
+        await waitFor(() => screen.getAllByPlaceholderText('Enter your Email'))
+        expect(screen.getAllByPlaceholderText('Enter your Email')).toBeTruthy()
+    })
+
+    it('check password placeholders',async()=>{
+        render(
+            <BrowserRouter>
+                <UserContext.Provider value={{ userRole: "Admin", isAuth: false, isLoading: false }}>
+                    <Login />
+                </UserContext.Provider>
+            </BrowserRouter>
+        )
+        await waitFor(() => screen.getAllByPlaceholderText('Enter Password'))
+        expect(screen.getAllByPlaceholderText('Enter Password')).toBeTruthy()
+    })
+})
+
+describe("Check input",()=>{
+    it("check email input",()=>{
+        render(
+            <BrowserRouter>
+                <UserContext.Provider value={{ userRole: "Admin", isAuth: false, isLoading: false }}>
+                    <Login />
+                </UserContext.Provider>
+            </BrowserRouter>
+        )
+        const input = screen.getByTitle("email")
+        fireEvent.change(input,{target:{value:"email@gmail.com"}})
+        expect(input.value).toBe("email@gmail.com")
+    })
+
+    it("check validation",()=>{
+        render(
+            <BrowserRouter>
+                <UserContext.Provider value={{ userRole: "Admin", isAuth: false, isLoading: false }}>
+                    <Login />
+                </UserContext.Provider>
+            </BrowserRouter>
+        )
+        const inputEmail = screen.getByTitle("email")
+        const inputPassword = screen.getByTitle("password")
+        fireEvent.change(inputEmail,{target:{value:""}})
+        fireEvent.change(inputPassword,{target:{value:""}})
+        fireEvent.click(screen.getByTitle("sign"))
+        expect(screen.getByTitle("emailError").innerHTML).toBe("Email id is Required")
+        expect(screen.getByTitle("passwordError").innerHTML).toBe("Password is Required")
+    })
+})
