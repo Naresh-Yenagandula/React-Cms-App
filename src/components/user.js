@@ -1,8 +1,8 @@
 
 import Navbar from '../components/navbar';
-import { Container, Row, Col, ListGroup, Button, Breadcrumb,Table,Alert, Spinner, Modal } from 'react-bootstrap';
-import { Speedometer,FolderFill,PeopleFill,FileEarmarkFill,PencilSquare,TrashFill } from 'react-bootstrap-icons';
-import {Link} from 'react-router-dom';
+import { Container, Row, Col, ListGroup, Button, Breadcrumb, Table, Alert, Spinner, Modal } from 'react-bootstrap';
+import { Speedometer, FolderFill, PeopleFill, FileEarmarkFill, PencilSquare, TrashFill } from 'react-bootstrap-icons';
+import { Link, NavLink } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
@@ -19,14 +19,14 @@ function User(props) {
     const pageLimit = 5
     const offset = currentPage * pageLimit;
     const pageCount = Math.ceil(dataLength / pageLimit)
-    const value=useContext(UserContext)
+    const value = useContext(UserContext)
 
     useEffect(() => {
         if (!value.isAuth && !value.isLoading) {
             props.history.push('/login')
             return false
         }
-        axios.get("http://localhost:8081/api/users/"+ offset)
+        axios.get("http://localhost:8081/api/users/" + offset)
             .then((result) => {
                 setLoading(false)
                 if (result.data.result[0]) {
@@ -40,7 +40,7 @@ function User(props) {
                 setMessage({ message: "Something went wrong", variant: "danger" })
                 setLoading(false)
             })
-    }, [offset,props,value])
+    }, [offset, props, value])
 
     const deleteUser = (id) => {
         setSmShow({ view: true, message: "Deleting..." })
@@ -56,19 +56,6 @@ function User(props) {
 
     const pageChange = ({ selected: selectedPage }) => {
         setCurrentPage(selectedPage);
-    }
-
-    const dashboard = () => {
-        props.history.push("/dashboard")
-    }
-    const page = () => {
-        props.history.push("/pages")
-    }
-    const category = () => {
-        props.history.push("/category")
-    }
-    const user = () => {
-        props.history.push("/users")
     }
     return (
         <React.Fragment>
@@ -100,10 +87,12 @@ function User(props) {
                 <Row>
                     <Col md={4}>
                         <ListGroup defaultActiveKey="#link1">
-                            <ListGroup.Item action onClick={dashboard}><Speedometer></Speedometer> Dashboard</ListGroup.Item>
-                            <ListGroup.Item action onClick={page}><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item>
-                            <ListGroup.Item action onClick={category}><FolderFill></FolderFill> Category</ListGroup.Item>
-                            <ListGroup.Item action active onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>
+                            <NavLink style={{textDecoration:"none"}} to="/dashboard"><ListGroup.Item action><Speedometer></Speedometer> Dashboard</ListGroup.Item></NavLink>
+                            <NavLink style={{textDecoration:"none"}} to="/pages"><ListGroup.Item action ><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item></NavLink>
+                            <NavLink style={{textDecoration:"none"}} to="/category"><ListGroup.Item action ><FolderFill></FolderFill> Category</ListGroup.Item></NavLink>
+                            {value.userRole === "Admin" ?
+                                <NavLink style={{textDecoration:"none"}} to="/users"><ListGroup.Item action active><PeopleFill></PeopleFill> Users</ListGroup.Item></NavLink> :
+                                null}
                         </ListGroup>
                     </Col>
                     <Col md={8} className="mt-4">
@@ -124,38 +113,38 @@ function User(props) {
                             </Breadcrumb.Item>
                         </Breadcrumb>
                         {isLoading ?
-                          <Row>
-                          <Col md={{ span: 6, offset: 5 }}><Spinner animation="border" /></Col>
-                          </Row> :
-                         <React.Fragment> 
-                        <Table hover size="sm">
-                            <thead>
-                                <tr>
-                                    <th>Full Name</th>
-                                    <th>Email</th>
-                                    <th>Group</th>
-                                    <th>Update</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </thead>
-                            {message ?
-                                    <tbody><tr><td colSpan="5" className="text-center"><Alert variant={message.variant}>{message.message}</Alert></td></tr></tbody> :
-                                    <tbody>
-                                        {userData.map((user) => {
-                                            return (
-                                                <tr key={user._id}>
-                                                    <td>{user.name}</td>
-                                                    <td>{user.email}</td>
-                                                    <td>{user.group}</td>
-                                                    <td><Link to={`users/update/${user._id}`}><Button size="sm" variant="outline-info"><PencilSquare></PencilSquare></Button></Link></td>
-                                                    <td><Button variant="outline-danger" onClick={() => setSmShow({ view: true, id: `${user._id}`, message: '' })} size="sm"><TrashFill></TrashFill></Button></td>
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                }
-                        </Table>
-                        <ReactPaginate
+                            <Row>
+                                <Col md={{ span: 6, offset: 5 }}><Spinner animation="border" /></Col>
+                            </Row> :
+                            <React.Fragment>
+                                <Table hover size="sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Full Name</th>
+                                            <th>Email</th>
+                                            <th>Group</th>
+                                            <th>Update</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    {message ?
+                                        <tbody><tr><td colSpan="5" className="text-center"><Alert variant={message.variant}>{message.message}</Alert></td></tr></tbody> :
+                                        <tbody>
+                                            {userData.map((user) => {
+                                                return (
+                                                    <tr key={user._id}>
+                                                        <td>{user.name}</td>
+                                                        <td>{user.email}</td>
+                                                        <td>{user.group}</td>
+                                                        <td><Link to={`users/update/${user._id}`}><Button size="sm" variant="outline-info"><PencilSquare></PencilSquare></Button></Link></td>
+                                                        <td><Button variant="outline-danger" onClick={() => setSmShow({ view: true, id: `${user._id}`, message: '' })} size="sm"><TrashFill></TrashFill></Button></td>
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    }
+                                </Table>
+                                <ReactPaginate
                                     previousLabel={"Prev"}
                                     nextLabel={"Next"}
                                     pageCount={pageCount}
@@ -166,9 +155,9 @@ function User(props) {
                                     nextLinkClassName={"page-link"}
                                     disabledClassName={"page-item disabled"}
                                     activeClassName={"page-item active"}
-                        />
-                        </React.Fragment>
-                       }
+                                />
+                            </React.Fragment>
+                        }
                     </Col>
                 </Row>
             </Container>

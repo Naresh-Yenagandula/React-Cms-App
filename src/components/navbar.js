@@ -1,16 +1,19 @@
 import React from 'react';
 import { useContext } from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink,useHistory } from 'react-router-dom';
 import { UserContext } from '../App';
 
 function Navbars() {
+    const history = useHistory()
     const value = useContext(UserContext)
     const logout = () => {
         localStorage.removeItem('token')
         value.isAuth = false
         value.userName = ""
         value.userRole = ""
+        history.push("/login")
+        
     }
     return (
         <React.Fragment >

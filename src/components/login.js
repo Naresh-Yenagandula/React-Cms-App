@@ -48,6 +48,7 @@ function Login(props) {
     }
     return (
         <div style={{ paddingTop: "10%" }}>
+            <style>{'body {background-color:#1995dc}'}</style>
             <Container>
                 <Row>
                     <Col md={4}></Col>

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Navbar from '../components/navbar';
 import { Container, Row, Col, ListGroup, Button, Breadcrumb, Form, Alert } from 'react-bootstrap';
 import { FileEarmarkFill,Speedometer,PeopleFill,FolderFill } from 'react-bootstrap-icons';
-import { Link } from 'react-router-dom';
+import { Link,NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 import { UserContext } from '../App';
@@ -24,19 +24,6 @@ function AddUser(props) {
 
     const value=useContext(UserContext)
     const [message, setMessage] = useState();
-
-    const dashboard = () => {
-        props.history.push("/dashboard")
-    }
-    const page = () => {
-        props.history.push("/pages")
-    }
-    const category = () => {
-        props.history.push("/category")
-    }
-    const user = () => {
-        props.history.push("/users")
-    }
 
     const validate = () => {
         let nameError, emailError, passwordError, groupError = "";
@@ -95,11 +82,11 @@ function AddUser(props) {
                 <Row>
                     <Col md={4}>
                         <ListGroup defaultActiveKey="#link1">
-                            <ListGroup.Item action onClick={dashboard}><Speedometer></Speedometer> Dashboard</ListGroup.Item>
-                            <ListGroup.Item action onClick={page}><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item>
-                            <ListGroup.Item action onClick={category}><FolderFill></FolderFill> Category</ListGroup.Item>
+                            <NavLink style={{textDecoration:"none"}} to="/dashboard"><ListGroup.Item action><Speedometer></Speedometer> Dashboard</ListGroup.Item></NavLink>
+                            <NavLink style={{textDecoration:"none"}} to="/pages"><ListGroup.Item action ><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item></NavLink>
+                            <NavLink style={{textDecoration:"none"}} to="/category"><ListGroup.Item action ><FolderFill></FolderFill> Category</ListGroup.Item></NavLink>
                             {value.userRole==="Admin"?
-                            <ListGroup.Item action onClick={user}><PeopleFill></PeopleFill> Users</ListGroup.Item>:
+                            <NavLink style={{textDecoration:"none"}} to="/users"><ListGroup.Item action active><PeopleFill></PeopleFill> Users</ListGroup.Item></NavLink>:
                             null}
                         </ListGroup>
                     </Col>
