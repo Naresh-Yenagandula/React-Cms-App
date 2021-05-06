@@ -5,20 +5,20 @@ import { NavLink,useHistory } from 'react-router-dom';
 import { UserContext } from '../App';
 
 function Navbars() {
-    const history = useHistory()
+    // const history = useHistory()
     const value = useContext(UserContext)
     const logout = () => {
         localStorage.removeItem('token')
         value.isAuth = false
         value.userName = ""
         value.userRole = ""
-        history.push("/login")
+        // history.push("/login")
         
     }
     return (
         <React.Fragment >
             <Navbar collapseOnSelect expand="lg" style={{ backgroundColor: "#1995dc" }} variant="dark">
-                <Navbar.Brand>DCX CMS</Navbar.Brand>
+                <Navbar.Brand title="brand">DCX CMS</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     {value.userRole === "Admin" ?

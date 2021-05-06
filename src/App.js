@@ -41,7 +41,7 @@ function App() {
 
 
   if (!auth && loading === true) {
-    return (<p>Checking....</p>)
+    return (<div style={{display:"flex",justifyContent:"center",top:"40%"}}><p>Checking....</p></div>)
   } else {
 
     return (
