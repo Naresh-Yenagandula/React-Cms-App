@@ -1,6 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Navbar from "../components/navbar";
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 import {
     Container,
     Row,
@@ -38,6 +40,8 @@ function Category(props) {
     const offset = currentPage * pageLimit;
     const pageCount = Math.ceil(dataLength / pageLimit);
     const value = useContext(UserContext)
+    const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileExtension = ".xlsx";
 
     useEffect(() => {
         if (!value.isAuth && !value.isLoading) {
@@ -88,6 +92,20 @@ function Category(props) {
     const user = () => {
         props.history.push("/users");
     };
+
+    const excelExport = () => {
+        axios.get("http://localhost:8081/api/allCategory")
+            .then((result) => {
+                const ws = XLSX.utils.json_to_sheet(result.data);
+                const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+                const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+                const data = new Blob([excelBuffer], { type: fileType });
+                FileSaver.saveAs(data, "CategoryData" + fileExtension);
+            })
+            .catch((err)=>{
+                console.log(err);
+            })
+    }
 
     return (
         <React.Fragment>
@@ -143,11 +161,11 @@ function Category(props) {
                             <ListGroup.Item action active onClick={category}>
                                 <FolderFill></FolderFill> Category
                             </ListGroup.Item>
-                            {value.userRole==="Admin"?
-                            <ListGroup.Item action onClick={user}>
-                                <PeopleFill></PeopleFill> Users
-                            </ListGroup.Item>:
-                            null}
+                            {value.userRole === "Admin" ?
+                                <ListGroup.Item action onClick={user}>
+                                    <PeopleFill></PeopleFill> Users
+                                </ListGroup.Item> :
+                                null}
                         </ListGroup>
                     </Col>
                     <Col md={8} className="mt-4">
@@ -166,7 +184,8 @@ function Category(props) {
                                         <Button variant="outline-primary">
                                             <b>New</b>
                                         </Button>
-                                    </Link>
+                                    </Link>{" "}
+                                    <Button variant="outline-primary" onClick={excelExport}>Export Category</Button>
                                 </div>
                             </Col>
                         </Row>

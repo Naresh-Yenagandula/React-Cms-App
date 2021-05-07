@@ -206,4 +206,37 @@ router.get('/pages',async (req,res)=>{
     }
 })
 
+//gets All pages
+router.get('/allPages',async (req,res)=>{
+    try {
+        const data = await Page.find();
+        return res.status(200).json(data);
+    } catch (error) {
+        res.status(400).json({message:"No Data"})
+        // console.log("Failed to get pages");
+    }
+})
+
+//gets All users
+router.get('/allUsers',async (req,res)=>{
+    try {
+        const data = await User.find();
+        return res.status(200).json(data);
+    } catch (error) {
+        res.status(400).json({message:"No Data"})
+        // console.log("Failed to get users");
+    }
+})
+
+//gets All category
+router.get('/allCategory',async (req,res)=>{
+    try {
+        const data = await categories.find();
+        return res.status(200).json(data);
+    } catch (error) {
+        res.status(400).json({message:"No Data"})
+        // console.log("Failed to get category");
+    }
+})
+
 module.exports = router;

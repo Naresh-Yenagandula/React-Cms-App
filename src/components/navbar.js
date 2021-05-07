@@ -1,7 +1,7 @@
 import React from 'react';
 import { useContext } from 'react';
 import { Navbar, Nav } from 'react-bootstrap';
-import { NavLink,useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { UserContext } from '../App';
 
 function Navbars() {

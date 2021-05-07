@@ -59,13 +59,20 @@ function App() {
               <Route exact path="/category/update/:id" component={UpdateCategory} />
               <Route exact path="/category/add" component={AddCategory} />
               <Route exact path="/users">
-                {userData.group === "Admin" ? <User /> : <Redirect to="/dashboard" />}
+                {userData.group === "Admin" ? <>
+                  <Route exact path="/users" component={User} />
+                  <Redirect to="/users" />
+                </> : <Redirect to="/dashboard" />}
               </Route>
               <Route exact path="/users/add">
-                {userData.group === "Admin" ? <AddUser /> : <Redirect to="/dashboard" />}
+                {userData.group === "Admin" ?
+                  <>
+                    <Route exact path="/users/add" component={AddUser} />
+                    <Redirect to="/users/add" />
+                  </>
+                  : <Redirect to="/dashboard" />}
               </Route>
-              <Route exact path="/users/update/:id">
-                {userData.group === "Admin" ? <UpdateUser /> : <Redirect to="/dashboard" />}
+              <Route exact path="/users/update/:id" component={UpdateUser}>
               </Route>
             </Switch>
           </Router>

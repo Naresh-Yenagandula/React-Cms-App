@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/navbar";
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 import {
   Container,
   Row,
@@ -37,6 +39,8 @@ function Page(props) {
   const offset = currentPage * pageLimit;
   const pageCount = Math.ceil(dataLength / pageLimit);
   const value=useContext(UserContext)
+  const fileType ="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+  const fileExtension = ".xlsx";
 
   useEffect(() => {
     if (!value.isAuth && !value.isLoading) {
@@ -78,6 +82,20 @@ function Page(props) {
   const pageChange = ({ selected: selectedPage }) => {
     setCurrentPage(selectedPage);
   };
+
+  const excelExport=()=>{
+    axios.get("http://localhost:8081/api/allPages")
+    .then((result)=>{
+      const ws = XLSX.utils.json_to_sheet(result.data);
+      const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+      const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const data = new Blob([excelBuffer], { type: fileType });
+      FileSaver.saveAs(data, "PageAllData" + fileExtension);
+    })
+    .catch((err)=>{
+      console.log("err in excel");
+    })
+  }
 
   const dashboard = () => {
     props.history.push("/dashboard");
@@ -168,7 +186,8 @@ function Page(props) {
                     <Button variant="outline-primary">
                       <b>New</b>
                     </Button>
-                  </Link>
+                  </Link>{" "}
+                  <Button variant="outline-primary" onClick={excelExport}>Export Page</Button>
                 </div>
               </Col>
             </Row>

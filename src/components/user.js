@@ -1,4 +1,3 @@
-
 import Navbar from '../components/navbar';
 import { Container, Row, Col, ListGroup, Button, Breadcrumb, Table, Alert, Spinner, Modal } from 'react-bootstrap';
 import { Speedometer, FolderFill, PeopleFill, FileEarmarkFill, PencilSquare, TrashFill } from 'react-bootstrap-icons';
@@ -8,6 +7,9 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { useContext } from 'react';
 import { UserContext } from '../App';
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
+
 function User(props) {
 
     const [userData, setData] = useState([])
@@ -20,6 +22,8 @@ function User(props) {
     const offset = currentPage * pageLimit;
     const pageCount = Math.ceil(dataLength / pageLimit)
     const value = useContext(UserContext)
+    const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileExtension = ".xlsx";
 
     useEffect(() => {
         if (!value.isAuth && !value.isLoading) {
@@ -57,6 +61,20 @@ function User(props) {
     const pageChange = ({ selected: selectedPage }) => {
         setCurrentPage(selectedPage);
     }
+
+    const excelExport = () => {
+        axios.get("http://localhost:8081/api/allUsers")
+            .then((result) => {
+                const ws = XLSX.utils.json_to_sheet(result.data);
+                const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+                const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+                const data = new Blob([excelBuffer], { type: fileType });
+                FileSaver.saveAs(data, "UserAllData" + fileExtension);
+            })
+            .catch((err)=>{
+                console.log("err in excel");
+            })
+    }
     return (
         <React.Fragment>
             <Navbar />
@@ -87,11 +105,11 @@ function User(props) {
                 <Row>
                     <Col md={4}>
                         <ListGroup defaultActiveKey="#link1">
-                            <NavLink style={{textDecoration:"none"}} to="/dashboard"><ListGroup.Item action><Speedometer></Speedometer> Dashboard</ListGroup.Item></NavLink>
-                            <NavLink style={{textDecoration:"none"}} to="/pages"><ListGroup.Item action ><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item></NavLink>
-                            <NavLink style={{textDecoration:"none"}} to="/category"><ListGroup.Item action ><FolderFill></FolderFill> Category</ListGroup.Item></NavLink>
+                            <NavLink style={{ textDecoration: "none" }} to="/dashboard"><ListGroup.Item action><Speedometer></Speedometer> Dashboard</ListGroup.Item></NavLink>
+                            <NavLink style={{ textDecoration: "none" }} to="/pages"><ListGroup.Item action ><FileEarmarkFill></FileEarmarkFill> Pages</ListGroup.Item></NavLink>
+                            <NavLink style={{ textDecoration: "none" }} to="/category"><ListGroup.Item action ><FolderFill></FolderFill> Category</ListGroup.Item></NavLink>
                             {value.userRole === "Admin" ?
-                                <NavLink style={{textDecoration:"none"}} to="/users"><ListGroup.Item action active><PeopleFill></PeopleFill> Users</ListGroup.Item></NavLink> :
+                                <NavLink style={{ textDecoration: "none" }} to="/users"><ListGroup.Item action active><PeopleFill></PeopleFill> Users</ListGroup.Item></NavLink> :
                                 null}
                         </ListGroup>
                     </Col>
@@ -103,7 +121,10 @@ function User(props) {
                                 </span>
                             </Col>
                             <Col md={6}>
-                                <div style={{ float: "right" }}><Link to="/users/add"><Button variant="outline-primary"><b>New</b></Button></Link></div>
+                                <div style={{ float: "right" }}>
+                                    <Link to="/users/add"><Button variant="outline-primary"><b>New</b></Button></Link>{" "}
+                                    <Button variant="outline-primary" onClick={excelExport}>Export Users</Button>
+                                </div>
                             </Col>
                         </Row><hr />
                         <Breadcrumb>
