@@ -18,7 +18,7 @@ describe("Check Login placeholder", () => {
         expect(screen.getByTitle('login').innerHTML).toBe('DCX CMS')
     })
 
-    it('check email placeholders',async()=>{
+    it('check email placeholders', async () => {
         render(
             <BrowserRouter>
                 <UserContext.Provider value={{ userRole: "Admin", isAuth: false, isLoading: false }}>
@@ -30,7 +30,7 @@ describe("Check Login placeholder", () => {
         expect(screen.getAllByPlaceholderText('Enter your Email')).toBeTruthy()
     })
 
-    it('check password placeholders',async()=>{
+    it('check password placeholders', async () => {
         render(
             <BrowserRouter>
                 <UserContext.Provider value={{ userRole: "Admin", isAuth: false, isLoading: false }}>
@@ -43,8 +43,8 @@ describe("Check Login placeholder", () => {
     })
 })
 
-describe("Check input",()=>{
-    it("check email input",()=>{
+describe("Check input", () => {
+    it("check email input", () => {
         render(
             <BrowserRouter>
                 <UserContext.Provider value={{ userRole: "Admin", isAuth: false, isLoading: false }}>
@@ -53,11 +53,11 @@ describe("Check input",()=>{
             </BrowserRouter>
         )
         const input = screen.getByTitle("email")
-        fireEvent.change(input,{target:{value:"email@gmail.com"}})
+        fireEvent.change(input, { target: { value: "email@gmail.com" } })
         expect(input.value).toBe("email@gmail.com")
     })
 
-    it("check validation",()=>{
+    it("check validation", () => {
         render(
             <BrowserRouter>
                 <UserContext.Provider value={{ userRole: "Admin", isAuth: false, isLoading: false }}>
@@ -67,8 +67,8 @@ describe("Check input",()=>{
         )
         const inputEmail = screen.getByTitle("email")
         const inputPassword = screen.getByTitle("password")
-        fireEvent.change(inputEmail,{target:{value:""}})
-        fireEvent.change(inputPassword,{target:{value:""}})
+        fireEvent.change(inputEmail, { target: { value: "" } })
+        fireEvent.change(inputPassword, { target: { value: "" } })
         fireEvent.click(screen.getByTitle("sign"))
         expect(screen.getByTitle("emailError").innerHTML).toBe("Email id is Required")
         expect(screen.getByTitle("passwordError").innerHTML).toBe("Password is Required")
