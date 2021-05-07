@@ -2,6 +2,7 @@ const router = require('express').Router();
 const User = require('../model/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 
 //add incoming user data in Db .
 router.post('/register',async (req,res)=>{
@@ -22,9 +23,31 @@ router.post('/register',async (req,res)=>{
     });
     try {
         const userSave = await user.save();
+        let transporter = await nodemailer.createTransport({
+            service:"gmail",
+            auth:{
+                user:"cmsappmailer@gmail.com",
+                pass:"Cmsapp123##"
+            }
+        })
+
+        let mailOptions = {
+            from:'cmsappmailer@gmail.com',
+            to:req.body.email,
+            subject:'CMS App Credentials',
+            text:'Your Credential for CMS App Login: \nEmail Id: '+req.body.email+'\n Password: '+req.body.password
+        }
+
+        transporter.sendMail(mailOptions)
+        .then((result)=>{
+            console.log("email send");
+        })
+        .catch((err)=>{
+            console.log("err");
+        })
         res.json({message:"Added"});
     } catch (error) {
-        console.log("Failed to add user");
+        console.log(error)
     }
 });
 

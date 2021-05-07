@@ -29,7 +29,30 @@ router.post('/users',async (req,res)=>{
     });
     try {
         const userSave = await users.save();
+        // let transporter = await nodemailer.createTransport({
+        //     service:"gmail",
+        //     auth:{
+        //         user:"cmsappmailer@gmail.com",
+        //         pass:"Cmsapp123##"
+        //     }
+        // })
+
+        // let mailOptions = {
+        //     from:'cmsappmailer@gmail.com',
+        //     to:"ayamithakur@gmail.com",
+        //     subject:'CMS App Credentials',
+        //     text:'password'
+        // }
+
+        // transporter.sendMail(mailOptions)
+        // .then((result)=>{
+        //     console.log("email send");
+        // })
+        // .catch((err)=>{
+        //     console.log("err");
+        // })
         res.json({message:"Added"});
+
     } catch (error) {
         // res.status(400).json({message:"Failed to add user"})
         res.status(400).json({message:"Failed to add user"})
