@@ -8,6 +8,7 @@ const cors = require("cors");
 const authRoute = require("./routes/authRoute");
 const verifyRoute = require("./routes/dashboard");
 const pageRoute = require("./routes/pageRoute");
+const otpRoute = require("./routes/otpRoute");
 
 //loads environment variables
 dotenv.config();
@@ -36,6 +37,7 @@ app.use(express.json());
 app.use("/authApi", authRoute);
 app.use("/verify", verifyRoute);
 app.use("/api", pageRoute);
+app.use('/otp',otpRoute);
 
 app.get("/", (req, res) => {
   res.send("Welcome to CMS App Node server1");

@@ -15,6 +15,9 @@ const userScheme = new mongoose.Schema({
     group:{
         type:String,
         required:true
+    },
+    otp:{
+        type:Number
     }
 });
 
