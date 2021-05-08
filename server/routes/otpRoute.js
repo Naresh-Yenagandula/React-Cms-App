@@ -12,6 +12,8 @@ router.put('/users',async (req,res)=>{
             $set:{otp:otp}
         },{useFindAndModify: false});
 
+        if(!data) return res.status(400).json({message:'User not exists'}); 
+
         let transporter = await nodemailer.createTransport({
             service:"gmail",
             auth:{
@@ -23,7 +25,7 @@ router.put('/users',async (req,res)=>{
         let mailOptions = {
             from:'cmsappmailer@gmail.com',
             to:req.body.email,
-            subject:'CMS App Credentials',
+            subject:'OTP for CMS App login',
             text:'OTP is:'+otp
         }
 
@@ -41,9 +43,21 @@ router.put('/users',async (req,res)=>{
 })
 
 
+router.put('/clearOtp',async (req,res)=>{
+    try {
+        const data = await User.findOneAndUpdate({email:req.body.email},{
+            $set:{otp:""}
+        },{useFindAndModify: false});
+        if(!data) return res.status(400).json({message:'User not exists'}); 
+        return res.status(200).json({message:"Cleared Otp"});
+    } catch (error) {
+     res.status(400).json({message:"Otp not cleared"})  
+    }
+})
+
 router.post('/users',async (req,res)=>{
     const user = await User.findOne({email:req.body.email,otp:req.body.otp});
-    if(!user) return res.status(400).json({message:'User not exists'});  
+    if(!user) return res.status(400).json({message:'Invalid Otp'});  
 
     //generates token with user id
     const token = await jwt.sign({_id:user._id},process.env.TOKEN_SECRET,{expiresIn:'24h'});

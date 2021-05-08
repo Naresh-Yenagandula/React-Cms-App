@@ -26,8 +26,8 @@ describe("Check Login placeholder", () => {
                 </UserContext.Provider>
             </BrowserRouter>
         )
-        await waitFor(() => screen.getAllByPlaceholderText('Enter your Email'))
-        expect(screen.getAllByPlaceholderText('Enter your Email')).toBeTruthy()
+        await waitFor(() => screen.getAllByPlaceholderText('eg. example@domain.com'))
+        expect(screen.getAllByPlaceholderText('eg. example@domain.com')).toBeTruthy()
     })
 
     it('check password placeholders', async () => {

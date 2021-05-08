@@ -126,7 +126,7 @@ function UpdateUser(props) {
                                 <Form.Group>
                                     <Form.Label>Email</Form.Label>
                                     <Form.Control type="email"
-                                        placeholder="Enter Email Id"
+                                        placeholder="eg. example@domain.com"
                                         value={userData.email}
                                         onChange={e => setUser({ ...userData, email: e.target.value })}
                                         isInvalid={!!error.emailErrorMessage}

@@ -9,6 +9,8 @@ function Login(props) {
     const [error, setError] = useState({ emailErrorMessage: '', passwordErrorMessage: '' })
     const value = useContext(UserContext)
     const [showOtp, setShowOtp] = useState({ email: false, otp: false })
+    const [disable,setDisable] = useState({email:true,password:true})
+    const [message,setMessage] = useState({message:"",color:""})
 
     useEffect(() => {
         if (value.isAuth) {
@@ -16,27 +18,59 @@ function Login(props) {
         }
     }, [value, props])
 
-    const validate = () => {
-        let emailError, passwordError = ''
 
-        if (!loginData.email) {
-            emailError = "Email id is Required"
-        }
-        if (!loginData.password) {
-            passwordError = "Password is Required"
-        }
+    const emailValidate=(e)=>{
+        let emailError=""
+        setLoginData({...loginData,email:e.target.value})
+        if (!e.target.value) {
+            emailError = "Email is required"
+            setDisable({...disable,email:true})
 
-        if (emailError || passwordError) {
-            setError({ emailErrorMessage: emailError, passwordErrorMessage: passwordError })
-            return false;
+        } else if (!loginData.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+            emailError = "Please enter a valid email"
+            setDisable({...disable,email:true})
+        }else{
+            emailError=""
+            setDisable({...disable,email:false})
+
         }
-        return true;
+        setError({...error,emailErrorMessage:emailError})
+    }
+    
+    // const emailValidateOtp=(e)=>{
+    //     let emailError=""
+    //     setOtp({...otpData,email:e.target.value})
+    //     if (!e.target.value) {
+    //         emailError = "Email is required"
+    //         setDisable({...disable,email:true})
+
+    //     } else if (!loginData.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+    //         emailError = "Please enter a valid email"
+    //         setDisable({...disable,email:true})
+    //     }else{
+    //         emailError=""
+    //         setDisable({...disable,email:false})
+
+    //     }
+    //     setError({...error,emailErrorMessage:emailError})
+    // }
+
+    const passwordValidate=(e)=>{
+        let passwordError=""
+        setLoginData({...loginData,password:e.target.value})
+        if(!e.target.value){
+            passwordError = "Password is required"
+            setDisable({...disable,password:true})
+        }else{
+            passwordError=""
+            setDisable({...disable,password:false})
+        }
+        setError({...error,passwordErrorMessage:passwordError})
     }
 
     const loginCheck = (e) => {
         e.preventDefault()
-        const isValid = validate();
-        if (isValid) {
+        if (!error.emailErrorMessage && !error.passwordErrorMessage) {
             axios.post("http://localhost:8081/authApi/login", loginData)
                 .then((result) => {
                     localStorage.setItem('token', result.data)
@@ -44,12 +78,14 @@ function Login(props) {
                     props.history.push("/dashboard")
                 })
                 .catch((err) => {
-                    console.log(err);
+                    setMessage({message:"User credentials does not match",color:"text-danger"})
                 })
         }
     }
 
     const showOtpForm = () => {
+        // setLoginData({email:'',password:''})
+        // setOtp({email:'',otp:''})
         if (showOtp.email === false) {
             setShowOtp({ ...showOtp, email: true })
         } else if (showOtp.email === true) {
@@ -57,16 +93,29 @@ function Login(props) {
         }
     }
 
+    // const clearOtp=setTimeout(()=>{
+    //     axios.put("http://localhost:8081/otp/clearOtp",otpData)
+    //     .then((result)=>{
+    //         console.log("otp cleared");
+    //     })
+    //     .catch((err)=>{
+    //         console.log("err in clearing otp");
+    //     })
+    // },60*1000)
+
     const otpCreate = () => {
+        setMessage({message:"",color:""})
         if (!otpData.email) {
             alert("Enter email")
         } else {
             axios.put("http://localhost:8081/otp/users", otpData)
                 .then((result) => {
-                    console.log(result.data);
                     setShowOtp({ ...showOtp, otp: true })
+                    setMessage({message:"OTP sent successfully",color:"text-success"})
+                    // clearOtp()
                 })
                 .catch((err) => {
+                    setMessage({message:"Something went wrong",color:"text-danger"})
                     console.log("Otp error");
                 })
         }
@@ -81,7 +130,7 @@ function Login(props) {
                 props.history.push("/dashboard")
             })
             .catch((err) => {
-                console.log(err);
+                setMessage({message:'Invalid OTP',color:"text-danger"})
             })
     }
     return (
@@ -96,14 +145,14 @@ function Login(props) {
                                 //login form for OTP
                                 <Form onSubmit={submitOtpData} >
                                     <Card.Body>
-                                        <Card.Title title="login" className=" text-center p-2">DCX CMS</Card.Title>
+                                        {message.message?<p className={message.color} style={{textAlign:"center"}}>{message.message}</p>:null}
+                                        <Card.Title className=" text-center p-2">DCX CMS</Card.Title>
                                         <Form.Group>
                                             <Form.Control
-                                                title="email"
                                                 type="email"
-                                                placeholder="Enter your Email"
+                                                placeholder="eg. example@domain.com"
                                                 // isInvalid={!!error.emailErrorMessage}
-                                                autoFocus
+                                                // autoFocus
                                                 disabled={showOtp.otp}
                                                 onChange={e => setOtp({ ...otpData, email: e.target.value })}
                                             />
@@ -131,15 +180,16 @@ function Login(props) {
                                 //Login form for Password
                                 <Form onSubmit={loginCheck} >
                                     <Card.Body>
+                                    {message.message?<p className={message.color} style={{textAlign:"center"}}>{message.message}</p>:null}
                                         <Card.Title title="login" className=" text-center p-2">DCX CMS</Card.Title>
                                         <Form.Group>
                                             <Form.Control
                                                 title="email"
                                                 type="email"
-                                                placeholder="Enter your Email"
+                                                placeholder="eg. example@domain.com"
                                                 isInvalid={!!error.emailErrorMessage}
                                                 autoFocus
-                                                onChange={e => setLoginData({ ...loginData, email: e.target.value })}
+                                                onChange={emailValidate}
                                             />
                                             <Form.Control.Feedback title="emailError" type="invalid">{error.emailErrorMessage}</Form.Control.Feedback>
                                         </Form.Group>
@@ -149,11 +199,11 @@ function Login(props) {
                                                 type="password"
                                                 placeholder="Enter Password"
                                                 isInvalid={!!error.passwordErrorMessage}
-                                                onChange={e => setLoginData({ ...loginData, password: e.target.value })}
+                                                onChange={passwordValidate}
                                             />
                                             <Form.Control.Feedback title="passwordError" type="invalid">{error.passwordErrorMessage}</Form.Control.Feedback>
                                         </Form.Group>
-                                        <Button title="sign" block type="submit" style={{ borderRadius: "20px" }}>SIGN IN</Button>
+                                        <Button title="sign" block type="submit" style={{ borderRadius: "20px" }} disabled={disable.email || disable.password}>SIGN IN</Button>
                                     </Card.Body>
                                 </Form>}
                             {showOtp.email === false ?

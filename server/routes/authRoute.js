@@ -3,6 +3,7 @@ const User = require('../model/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const generator = require('generate-password');
 
 //add incoming user data in Db .
 router.post('/register',async (req,res)=>{
@@ -11,9 +12,16 @@ router.post('/register',async (req,res)=>{
     const emailExists = await User.findOne({email:req.body.email});
     if(emailExists) return res.status(400).json({message:'Email Already Exists'});
 
+    const password = generator.generate({
+        length: 15,
+        numbers: true,
+        symbols:true
+    });
+    // console.log(password);
+
     //Hashing password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password,salt);
+    const hashedPassword = await bcrypt.hash(password,salt);
 
     const user = new User({
         name:req.body.name,
@@ -33,10 +41,10 @@ router.post('/register',async (req,res)=>{
         })
 
         let mailOptions = {
-            from:'cmsappmailer@gmail.com',
+            from:'CMS System <cmsappmailer@gmail.com>',
             to:req.body.email,
             subject:'CMS App Credentials',
-            text:'Your Credential for CMS App Login: \nEmail Id: '+req.body.email+'\n Password: '+req.body.password
+            text:'Your Credential for CMS App Login: \nEmail Id: '+req.body.email+'\n Password: '+password
         }
 
         transporter.sendMail(mailOptions)
