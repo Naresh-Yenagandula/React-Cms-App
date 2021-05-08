@@ -260,7 +260,7 @@ function Category(props) {
                                     pageCount={pageCount}
                                     onPageChange={pageChange}
                                     containerClassName={
-                                        "pagination pagination-sm justify-content-end"
+                                        "pagination pagination-sm justify-content-center"
                                     }
                                     pageLinkClassName={"page-link"}
                                     previousLinkClassName={"page-link"}

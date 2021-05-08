@@ -170,7 +170,7 @@ function User(props) {
                                     nextLabel={"Next"}
                                     pageCount={pageCount}
                                     onPageChange={pageChange}
-                                    containerClassName={"pagination pagination-sm justify-content-end"}
+                                    containerClassName={"pagination pagination-sm justify-content-center"}
                                     pageLinkClassName={"page-link"}
                                     previousLinkClassName={"page-link"}
                                     nextLinkClassName={"page-link"}
